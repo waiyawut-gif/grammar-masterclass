@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interactive English Grammar Masterclass</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Quicksand:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          display: ['Baloo 2', 'cursive'],
+          sans: ['Quicksand', 'sans-serif'],
+          mono: ['JetBrains Mono', 'monospace'],
+        },
+        colors: {
+          ink: '#1e1b4b',
+          bubble: '#ff8fab',
+          sunny: '#ffc94b',
+          aqua: '#5ec8f2',
+          mint: '#4fd1a5',
+        }
+      }
+    }
+  }
+</script>
+
+<style>
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Quicksand', sans-serif;
+    background-color: #fbf7ff;
+    background-image:
+      radial-gradient(circle at 8% 15%, rgba(94,200,242,0.12) 0, transparent 40%),
+      radial-gradient(circle at 92% 25%, rgba(255,143,171,0.14) 0, transparent 40%),
+      radial-gradient(circle at 50% 85%, rgba(79,209,165,0.10) 0, transparent 45%);
+  }
+  .font-display { font-family: 'Baloo 2', cursive; }
+
+  ::selection { background-color: #ffe1ea; }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #c7d2fe; border-radius: 10px; }
+
+  /* Tab panels */
+  .module-panel { display: none; }
+  .module-panel.active { display: block; animation: fadeSlide 0.45s ease; }
+  @keyframes fadeSlide {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .tab-btn { position: relative; }
+  .tab-btn.active-tab {
+    background-color: #4338ca;
+    color: white;
+    box-shadow: 0 6px 0 0 #312e81;
+    transform: translateY(-2px);
+  }
+  .tab-btn:not(.active-tab) { box-shadow: 0 4px 0 0 #e0e7ff; }
+  .tab-btn:not(.active-tab):hover { background-color: #eef2ff; transform: translateY(-2px); }
+  .tab-btn:active { transform: translateY(1px); }
+
+  .subtab-btn.active-subtab {
+    border-bottom-color: #4338ca;
+    color: #312e81;
+  }
+
+  .q-panel { display: none; }
+  .q-panel.active { display: block; }
+
+  /* progress ring */
+  .ring-bg { stroke: #e0e7ff; }
+  .ring-fg { stroke: #4338ca; transition: stroke-dashoffset 0.6s ease; }
+
+  .feedback-box { transition: all 0.3s ease; }
+
+  .option-card input:checked + label {
+    border-color: #4338ca;
+    background-color: #eef2ff;
+    box-shadow: 0 0 0 2px #c7d2fe;
+  }
+  .option-card input:focus-visible + label {
+    outline: none;
+    box-shadow: 0 0 0 3px #a5b4fc;
+    border-color: #4338ca;
+  }
+
+  .correct-flash { animation: pop 0.4s ease; }
+  @keyframes pop { 0% { transform: scale(1); } 40% { transform: scale(1.02); } 100% { transform: scale(1); } }
+
+  .wrong-shake { animation: shake 0.4s ease; }
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-6px); }
+    40% { transform: translateX(6px); }
+    60% { transform: translateX(-4px); }
+    80% { transform: translateX(4px); }
+  }
+
+  .grain {
+    background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.14) 1px, transparent 0);
+    background-size: 18px 18px;
+  }
+
+  /* chunky 3D press buttons */
+  .btn-chunky {
+    box-shadow: 0 5px 0 0 var(--chunky-shadow, #3730a3);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .btn-chunky:hover:not(:disabled) { transform: translateY(-2px); }
+  .btn-chunky:active:not(:disabled), .btn-chunky:disabled {
+    transform: translateY(3px);
+    box-shadow: 0 2px 0 0 var(--chunky-shadow, #3730a3);
+  }
+
+  /* floating decorative blobs */
+  .float-slow { animation: floaty 7s ease-in-out infinite; }
+  .float-slow-rev { animation: floaty 8s ease-in-out infinite reverse; }
+  @keyframes floaty {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-14px) rotate(6deg); }
+  }
+
+  .wiggle-hover:hover { animation: wiggle 0.5s ease; }
+  @keyframes wiggle {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-8deg); }
+    75% { transform: rotate(8deg); }
+  }
+
+  .pop-in { animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
+  @keyframes popIn {
+    0% { transform: scale(0.5); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+
+  /* confetti */
+  .confetti-piece {
+    position: absolute;
+    top: -10px;
+    border-radius: 2px;
+    animation: confettiFall linear forwards;
+  }
+  @keyframes confettiFall {
+    0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(420px) rotate(540deg); opacity: 0; }
+  }
+
+  input[type="text"]:focus, select:focus { outline: none; box-shadow: 0 0 0 3px #ffe1ea; border-color: #ff8fab; }
+
+  .letter-badge { font-family: 'Baloo 2', cursive; }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+
+<body class="text-slate-800 antialiased">
+
+<!-- ============ HERO ============ -->
+<header class="relative overflow-hidden bg-gradient-to-br from-indigo-700 via-violet-600 to-fuchsia-500 text-white">
+  <div class="absolute inset-0 grain opacity-30"></div>
+  <div class="absolute -top-20 -right-16 w-80 h-80 bg-sunny/40 rounded-full blur-3xl"></div>
+  <div class="absolute -bottom-24 -left-10 w-96 h-96 bg-aqua/30 rounded-full blur-3xl"></div>
+
+  <!-- floating doodles -->
+  <i class="fa-solid fa-star text-sunny/80 text-2xl absolute top-24 left-[8%] float-slow hidden sm:block"></i>
+  <i class="fa-solid fa-sparkle text-white/70 text-xl absolute top-16 left-[45%] float-slow-rev hidden md:block"></i>
+  <i class="fa-solid fa-star text-white/60 text-lg absolute top-40 right-[12%] float-slow hidden sm:block"></i>
+  <i class="fa-solid fa-pencil text-sunny/70 text-2xl absolute bottom-28 right-[20%] float-slow-rev hidden md:block"></i>
+  <i class="fa-solid fa-sparkle text-aqua/80 text-lg absolute bottom-16 left-[20%] float-slow hidden sm:block"></i>
+
+  <nav class="relative z-10 max-w-6xl mx-auto px-6 py-6 flex items-center justify-between">
+    <div class="flex items-center gap-2">
+      <div class="w-10 h-10 rounded-2xl bg-white/15 border border-white/30 flex items-center justify-center wiggle-hover">
+        <i class="fa-solid fa-graduation-cap text-sunny"></i>
+      </div>
+      <span class="font-display font-bold text-lg tracking-tight">Grammar Lab</span>
+    </div>
+    <div class="hidden sm:flex items-center gap-2 text-sm text-white/80 bg-white/10 rounded-full px-4 py-1.5 border border-white/20">
+      <i class="fa-regular fa-clock"></i><span>~25 min &middot; 3 modules &middot; 15 questions</span>
+    </div>
+  </nav>
+
+  <div class="relative z-10 max-w-6xl mx-auto px-6 pt-8 pb-24 md:pt-12 md:pb-32 grid md:grid-cols-[1fr_auto] gap-8 items-center">
+    <div>
+      <p class="inline-flex items-center gap-2 text-xs uppercase tracking-[0.15em] text-indigo-950 font-bold mb-5 rounded-full px-3.5 py-1.5 bg-sunny">
+        <i class="fa-solid fa-wand-magic-sparkles"></i> Let's level up your grammar!
+      </p>
+      <h1 class="font-display font-extrabold text-4xl sm:text-5xl md:text-6xl leading-[1.05] max-w-2xl drop-shadow-sm">
+        Interactive English<br> Grammar <span class="text-sunny">Masterclass</span>
+      </h1>
+      <p class="mt-6 text-lg text-white/90 max-w-xl leading-relaxed">
+        Learn the rules, spot right vs. wrong, then prove it with 15 fun challenges on nouns, tenses, and comparisons &mdash; with instant feedback (and a little celebration) every step of the way. 🎉
+      </p>
+      <div class="mt-9 flex flex-wrap items-center gap-4">
+        <a href="#modules" class="btn-chunky group inline-flex items-center gap-3 bg-white hover:bg-white text-indigo-700 font-bold px-7 py-3.5 rounded-2xl transition duration-300" style="--chunky-shadow:#c026d3">
+          Get Started
+          <i class="fa-solid fa-rocket transition duration-300 group-hover:translate-x-1 group-hover:-translate-y-1"></i>
+        </a>
+        <div class="flex items-center gap-3 text-sm text-white/85">
+          <div class="flex -space-x-2">
+            <span class="w-9 h-9 rounded-full bg-emerald-400 border-2 border-violet-600 flex items-center justify-center text-[10px] font-bold text-emerald-950 shadow-sm">M1</span>
+            <span class="w-9 h-9 rounded-full bg-aqua border-2 border-violet-600 flex items-center justify-center text-[10px] font-bold text-indigo-950 shadow-sm">M2</span>
+            <span class="w-9 h-9 rounded-full bg-bubble border-2 border-violet-600 flex items-center justify-center text-[10px] font-bold text-rose-950 shadow-sm">M3</span>
+          </div>
+          <span>Nouns &amp; Imperatives &middot; Present Tenses &middot; Comparisons</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- mascot -->
+    <div class="hidden md:block float-slow" aria-hidden="true">
+      <svg width="150" height="150" viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="75" cy="140" rx="45" ry="7" fill="#000" opacity="0.12"/>
+        <circle cx="75" cy="72" r="58" fill="#FFC94B"/>
+        <circle cx="75" cy="72" r="58" fill="none" stroke="#F59E0B" stroke-width="3"/>
+        <circle cx="55" cy="65" r="9" fill="#312e81"/>
+        <circle cx="95" cy="65" r="9" fill="#312e81"/>
+        <circle cx="58" cy="61" r="3" fill="white"/>
+        <circle cx="98" cy="61" r="3" fill="white"/>
+        <path d="M52 92 Q75 112 98 92" stroke="#312e81" stroke-width="5" fill="none" stroke-linecap="round"/>
+        <path d="M28 45 L20 15" stroke="#312e81" stroke-width="5" stroke-linecap="round"/>
+        <path d="M122 45 L130 15" stroke="#312e81" stroke-width="5" stroke-linecap="round"/>
+        <circle cx="20" cy="12" r="6" fill="#FB7185"/>
+        <circle cx="130" cy="12" r="6" fill="#FB7185"/>
+        <rect x="34" y="118" width="82" height="20" rx="10" fill="#4338CA"/>
+        <text x="75" y="132" font-family="Baloo 2, cursive" font-size="12" fill="white" text-anchor="middle" font-weight="700">A+</text>
+      </svg>
+    </div>
+  </div>
+
+  <svg class="absolute bottom-0 left-0 w-full text-[#fbf7ff]" viewBox="0 0 1440 60" fill="currentColor" preserveAspectRatio="none" style="height:48px;">
+    <path d="M0,32 C240,60 480,0 720,20 C960,40 1200,10 1440,30 L1440,60 L0,60 Z"></path>
+  </svg>
+</header>
+
+<!-- ============ TAB NAV (sticky) ============ -->
+<div id="modules" class="sticky top-0 z-40 bg-[#fbf7ff]/95 backdrop-blur-sm border-b border-indigo-100 shadow-sm">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex gap-3 overflow-x-auto">
+    <button data-module="1" class="tab-btn active-tab flex-shrink-0 flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-full font-bold text-sm text-indigo-700 transition duration-300">
+      <i class="fa-solid fa-shapes"></i> Module 1 &middot; Intro
+    </button>
+    <button data-module="2" class="tab-btn flex-shrink-0 flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-full font-bold text-sm text-indigo-700 transition duration-300">
+      <i class="fa-solid fa-clock-rotate-left"></i> Module 2 &middot; Unit 3
+    </button>
+    <button data-module="3" class="tab-btn flex-shrink-0 flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-full font-bold text-sm text-indigo-700 transition duration-300">
+      <i class="fa-solid fa-scale-balanced"></i> Module 3 &middot; Unit 4
+    </button>
+  </div>
+</div>
+
+<main class="max-w-6xl mx-auto px-4 sm:px-6 py-10 pb-32">
+
+<!-- ================================================================= -->
+<!-- MODULE 1 -->
+<!-- ================================================================= -->
+<section class="module-panel active" data-module-panel="1">
+
+  <div class="mb-8">
+    <span class="text-xs font-bold uppercase tracking-widest text-emerald-600">Module 1</span>
+    <h2 class="font-display font-bold text-3xl text-indigo-950 mt-1">Nouns, Demonstratives &amp; Imperatives</h2>
+    <p class="text-slate-500 mt-2 max-w-2xl">The building blocks: naming one thing vs. many, pointing things out, and giving instructions.</p>
+  </div>
+
+  <!-- sub-tabs -->
+  <div class="flex gap-6 border-b border-slate-200 mb-8">
+    <button class="subtab-btn active-subtab pb-3 border-b-2 border-transparent font-semibold text-slate-500 transition duration-300" data-subtab="learn" data-module="1">
+      <i class="fa-solid fa-book mr-2"></i>Learn &amp; Review
+    </button>
+    <button class="subtab-btn pb-3 border-b-2 border-transparent font-semibold text-slate-500 transition duration-300" data-subtab="practice" data-module="1">
+      <i class="fa-solid fa-pen-to-square mr-2"></i>Practice Exercises
+    </button>
+  </div>
+
+  <!-- LEARN -->
+  <div class="subtab-panel active" data-subtab-panel="learn" data-module="1">
+
+    <div class="grid md:grid-cols-2 gap-6 mb-8">
+      <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+        <h3 class="font-display font-bold text-xl text-indigo-900 mb-3"><i class="fa-solid fa-layer-group text-indigo-500 mr-2"></i>Regular Plurals</h3>
+        <table class="w-full text-sm">
+          <thead><tr class="text-left text-slate-400 border-b border-slate-100"><th class="py-2">Ending</th><th>Rule</th><th>Example</th></tr></thead>
+          <tbody class="divide-y divide-slate-100">
+            <tr><td class="py-2 font-mono text-indigo-600">most nouns</td><td>+ s</td><td>cat &rarr; cat<b>s</b></td></tr>
+            <tr><td class="py-2 font-mono text-indigo-600">-s, -x, -ch, -sh</td><td>+ es</td><td>box &rarr; box<b>es</b></td></tr>
+            <tr><td class="py-2 font-mono text-indigo-600">consonant + y</td><td>y &rarr; ies</td><td>baby &rarr; bab<b>ies</b></td></tr>
+            <tr><td class="py-2 font-mono text-indigo-600">-f / -fe</td><td>f/fe &rarr; ves</td><td>leaf &rarr; lea<b>ves</b></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+        <h3 class="font-display font-bold text-xl text-indigo-900 mb-3"><i class="fa-solid fa-shuffle text-indigo-500 mr-2"></i>Irregular Plurals</h3>
+        <p class="text-sm text-slate-500 mb-3">These don't follow any spelling pattern &mdash; memorize them.</p>
+        <div class="grid grid-cols-2 gap-2 text-sm">
+          <div class="bg-indigo-50 rounded-2xl px-3 py-2 flex justify-between"><span>man</span><i class="fa-solid fa-arrow-right text-indigo-300 mx-1"></i><span class="font-semibold">men</span></div>
+          <div class="bg-indigo-50 rounded-2xl px-3 py-2 flex justify-between"><span>woman</span><i class="fa-solid fa-arrow-right text-indigo-300 mx-1"></i><span class="font-semibold">women</span></div>
+          <div class="bg-indigo-50 rounded-2xl px-3 py-2 flex justify-between"><span>child</span><i class="fa-solid fa-arrow-right text-indigo-300 mx-1"></i><span class="font-semibold">children</span></div>
+          <div class="bg-indigo-50 rounded-2xl px-3 py-2 flex justify-between"><span>person</span><i class="fa-solid fa-arrow-right text-indigo-300 mx-1"></i><span class="font-semibold">people</span></div>
+          <div class="bg-indigo-50 rounded-2xl px-3 py-2 flex justify-between"><span>tooth</span><i class="fa-solid fa-arrow-right text-indigo-300 mx-1"></i><span class="font-semibold">teeth</span></div>
+          <div class="bg-indigo-50 rounded-2xl px-3 py-2 flex justify-between"><span>mouse</span><i class="fa-solid fa-arrow-right text-indigo-300 mx-1"></i><span class="font-semibold">mice</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm mb-8">
+      <h3 class="font-display font-bold text-xl text-indigo-900 mb-3"><i class="fa-solid fa-arrows-left-right text-indigo-500 mr-2"></i>Demonstratives</h3>
+      <p class="text-sm text-slate-500 mb-4">Choice depends on two things: is it singular or plural, and is it near or far from you?</p>
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm border-collapse">
+          <thead>
+            <tr class="bg-indigo-600 text-white">
+              <th class="py-3 px-4 text-left rounded-tl-lg">Distance</th>
+              <th class="py-3 px-4 text-left">Singular</th>
+              <th class="py-3 px-4 text-left rounded-tr-lg">Plural</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="bg-emerald-50 border-b border-white">
+              <td class="py-3 px-4 font-semibold text-emerald-700"><i class="fa-solid fa-location-dot mr-2"></i>Near</td>
+              <td class="py-3 px-4 font-mono">This</td>
+              <td class="py-3 px-4 font-mono">These</td>
+            </tr>
+            <tr class="bg-amber-50">
+              <td class="py-3 px-4 font-semibold text-amber-700"><i class="fa-solid fa-binoculars mr-2"></i>Far</td>
+              <td class="py-3 px-4 font-mono">That</td>
+              <td class="py-3 px-4 font-mono">Those</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="mt-4 text-sm bg-slate-50 rounded-2xl p-4 text-slate-600">
+        <i class="fa-solid fa-lightbulb text-amber-400 mr-2"></i><b>This</b> pen (in my hand) is better than <b>that</b> pen (over there). <b>These</b> keys (here) open <b>those</b> doors (across the room).
+      </div>
+    </div>
+
+    <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+      <h3 class="font-display font-bold text-xl text-indigo-900 mb-4"><i class="fa-solid fa-bullhorn text-indigo-500 mr-2"></i>Imperatives</h3>
+      <p class="text-sm text-slate-500 mb-4">Used for commands, instructions, and requests. No subject is needed &mdash; start with the verb.</p>
+      <div class="grid sm:grid-cols-2 gap-4">
+        <div class="rounded-2xl border border-emerald-200 bg-emerald-50 p-4">
+          <p class="text-xs font-bold uppercase text-emerald-600 mb-2"><i class="fa-solid fa-check mr-1"></i>Affirmative &mdash; base verb</p>
+          <p class="font-mono text-sm text-emerald-900">Close the door.</p>
+          <p class="font-mono text-sm text-emerald-900">Sit down, please.</p>
+        </div>
+        <div class="rounded-2xl border border-rose-200 bg-rose-50 p-4">
+          <p class="text-xs font-bold uppercase text-rose-600 mb-2"><i class="fa-solid fa-ban mr-1"></i>Negative &mdash; Don't + base verb</p>
+          <p class="font-mono text-sm text-rose-900">Don't close the door.</p>
+          <p class="font-mono text-sm text-rose-900">Don't be late.</p>
+        </div>
+      </div>
+      <div class="mt-4 flex items-start gap-3 text-sm bg-rose-50/60 border border-rose-100 rounded-2xl p-4">
+        <i class="fa-solid fa-triangle-exclamation text-rose-400 mt-0.5"></i>
+        <p class="text-slate-600"><span class="font-semibold text-rose-600">Common mistake:</span> "Don't <span class="line-through">running</span>" &mdash; the verb after <span class="font-mono">Don't</span> must stay in its base form: "Don't <b>run</b>."</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- PRACTICE -->
+  <div class="subtab-panel" data-subtab-panel="practice" data-module="1">
+    <div id="quiz-m1" class="space-y-6"></div>
+  </div>
+
+</section>
+
+<!-- ================================================================= -->
+<!-- MODULE 2 -->
+<!-- ================================================================= -->
+<section class="module-panel" data-module-panel="2">
+
+  <div class="mb-8">
+    <span class="text-xs font-bold uppercase tracking-widest text-indigo-500">Module 2 &middot; Unit 3</span>
+    <h2 class="font-display font-bold text-3xl text-indigo-950 mt-1">Present Continuous &amp; Present Simple</h2>
+    <p class="text-slate-500 mt-2 max-w-2xl">What's happening right now vs. what happens generally &mdash; and the verbs that break the rule.</p>
+  </div>
+
+  <div class="flex gap-6 border-b border-slate-200 mb-8">
+    <button class="subtab-btn active-subtab pb-3 border-b-2 border-transparent font-semibold text-slate-500 transition duration-300" data-subtab="learn" data-module="2">
+      <i class="fa-solid fa-book mr-2"></i>Learn &amp; Review
+    </button>
+    <button class="subtab-btn pb-3 border-b-2 border-transparent font-semibold text-slate-500 transition duration-300" data-subtab="practice" data-module="2">
+      <i class="fa-solid fa-pen-to-square mr-2"></i>Practice Exercises
+    </button>
+  </div>
+
+  <div class="subtab-panel active" data-subtab-panel="learn" data-module="2">
+
+    <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm mb-8">
+      <h3 class="font-display font-bold text-xl text-indigo-900 mb-3"><i class="fa-solid fa-bolt text-indigo-500 mr-2"></i>Present Continuous: Subject + be + V-ing</h3>
+      <div class="flex flex-wrap gap-3 mb-5">
+        <span class="bg-indigo-100 text-indigo-800 font-mono text-sm px-3 py-1.5 rounded-2xl">I am (I'm)</span>
+        <span class="bg-indigo-100 text-indigo-800 font-mono text-sm px-3 py-1.5 rounded-2xl">He/She/It is ('s)</span>
+        <span class="bg-indigo-100 text-indigo-800 font-mono text-sm px-3 py-1.5 rounded-2xl">We/You/They are ('re)</span>
+      </div>
+      <p class="text-sm text-slate-500 mb-3 font-semibold">V-ing spelling rules:</p>
+      <table class="w-full text-sm">
+        <thead><tr class="text-left text-slate-400 border-b border-slate-100"><th class="py-2">Rule</th><th>Example</th></tr></thead>
+        <tbody class="divide-y divide-slate-100">
+          <tr><td class="py-2">Drop silent <span class="font-mono text-indigo-600">-e</span></td><td>make &rarr; mak<b>ing</b></td></tr>
+          <tr><td class="py-2">1 syllable, CVC &rarr; double consonant</td><td>stop &rarr; stop<b>p</b>ing</td></tr>
+          <tr><td class="py-2"><span class="font-mono text-indigo-600">-ie</span> &rarr; <span class="font-mono text-indigo-600">y</span></td><td>lie &rarr; l<b>y</b>ing</td></tr>
+          <tr><td class="py-2">otherwise: just add <span class="font-mono text-indigo-600">-ing</span></td><td>read &rarr; read<b>ing</b></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm mb-8">
+      <h3 class="font-display font-bold text-xl text-indigo-900 mb-3"><i class="fa-solid fa-code-compare text-indigo-500 mr-2"></i>Present Simple vs. Present Continuous</h3>
+      <div class="grid sm:grid-cols-2 gap-4">
+        <div class="rounded-2xl border border-slate-200 p-4">
+          <p class="font-semibold text-slate-700 mb-2"><i class="fa-regular fa-calendar text-indigo-400 mr-2"></i>Present Simple</p>
+          <p class="text-sm text-slate-500 mb-2">Habits, routines, facts.</p>
+          <p class="text-xs text-slate-400 mb-2">Time words: always, usually, every day, on Mondays</p>
+          <p class="font-mono text-sm text-indigo-700">She walks to school every day.</p>
+        </div>
+        <div class="rounded-2xl border border-slate-200 p-4">
+          <p class="font-semibold text-slate-700 mb-2"><i class="fa-solid fa-video text-indigo-400 mr-2"></i>Present Continuous</p>
+          <p class="text-sm text-slate-500 mb-2">Actions happening right now.</p>
+          <p class="text-xs text-slate-400 mb-2">Time words: now, right now, at the moment, look!</p>
+          <p class="font-mono text-sm text-indigo-700">She is walking to school right now.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+      <h3 class="font-display font-bold text-xl text-indigo-900 mb-3"><i class="fa-solid fa-hand text-indigo-500 mr-2"></i>Stative Verbs &mdash; No -ing Allowed</h3>
+      <p class="text-sm text-slate-500 mb-4">Verbs describing states, feelings, or thoughts (like, want, know, need, love, believe, understand, own) are almost never used in the continuous form.</p>
+      <div class="grid sm:grid-cols-2 gap-4">
+        <div class="rounded-2xl border border-rose-200 bg-rose-50 p-4">
+          <p class="text-xs font-bold uppercase text-rose-600 mb-2"><i class="fa-solid fa-xmark mr-1"></i>Incorrect</p>
+          <p class="font-mono text-sm text-rose-900 line-through">I am wanting some coffee.</p>
+          <p class="font-mono text-sm text-rose-900 line-through">She is knowing the answer.</p>
+        </div>
+        <div class="rounded-2xl border border-emerald-200 bg-emerald-50 p-4">
+          <p class="text-xs font-bold uppercase text-emerald-600 mb-2"><i class="fa-solid fa-check mr-1"></i>Correct</p>
+          <p class="font-mono text-sm text-emerald-900">I want some coffee.</p>
+          <p class="font-mono text-sm text-emerald-900">She knows the answer.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="subtab-panel" data-subtab-panel="practice" data-module="2">
+    <div id="quiz-m2" class="space-y-6"></div>
+  </div>
+
+</section>
+
+<!-- ================================================================= -->
+<!-- MODULE 3 -->
+<!-- ================================================================= -->
+<section class="module-panel" data-module-panel="3">
+
+  <div class="mb-8">
+    <span class="text-xs font-bold uppercase tracking-widest text-rose-500">Module 3 &middot; Unit 4</span>
+    <h2 class="font-display font-bold text-3xl text-indigo-950 mt-1">Comparative &amp; Superlative Adjectives</h2>
+    <p class="text-slate-500 mt-2 max-w-2xl">Comparing two things vs. picking the extreme of a whole group.</p>
+  </div>
+
+  <div class="flex gap-6 border-b border-slate-200 mb-8">
+    <button class="subtab-btn active-subtab pb-3 border-b-2 border-transparent font-semibold text-slate-500 transition duration-300" data-subtab="learn" data-module="3">
+      <i class="fa-solid fa-book mr-2"></i>Learn &amp; Review
+    </button>
+    <button class="subtab-btn pb-3 border-b-2 border-transparent font-semibold text-slate-500 transition duration-300" data-subtab="practice" data-module="3">
+      <i class="fa-solid fa-pen-to-square mr-2"></i>Practice Exercises
+    </button>
+  </div>
+
+  <div class="subtab-panel active" data-subtab-panel="learn" data-module="3">
+
+    <div class="grid sm:grid-cols-2 gap-4 mb-8">
+      <div class="rounded-2xl bg-indigo-600 text-white p-6">
+        <p class="text-xs uppercase tracking-widest text-indigo-200 mb-2">Two things</p>
+        <h3 class="font-display font-bold text-2xl mb-2">Comparative</h3>
+        <p class="text-indigo-100 text-sm">adjective + <span class="font-mono">-er</span> &nbsp;or&nbsp; <span class="font-mono">more</span> + adjective &nbsp;+&nbsp; <span class="font-mono">than</span></p>
+        <p class="font-mono text-sm mt-3 bg-white/10 rounded-2xl px-3 py-2">A train is faster <b>than</b> a bike.</p>
+      </div>
+      <div class="rounded-2xl bg-amber-500 text-white p-6">
+        <p class="text-xs uppercase tracking-widest text-amber-100 mb-2">A whole group</p>
+        <h3 class="font-display font-bold text-2xl mb-2">Superlative</h3>
+        <p class="text-amber-50 text-sm"><span class="font-mono">the</span> + adjective + <span class="font-mono">-est</span> &nbsp;or&nbsp; <span class="font-mono">the most</span> + adjective</p>
+        <p class="font-mono text-sm mt-3 bg-white/10 rounded-2xl px-3 py-2">The bullet train is <b>the fastest</b>.</p>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm mb-8 overflow-x-auto">
+      <h3 class="font-display font-bold text-xl text-indigo-900 mb-4"><i class="fa-solid fa-ruler text-indigo-500 mr-2"></i>Spelling Rules</h3>
+      <table class="w-full text-sm border-collapse min-w-[560px]">
+        <thead>
+          <tr class="bg-indigo-600 text-white">
+            <th class="py-3 px-4 text-left rounded-tl-lg">Adjective type</th>
+            <th class="py-3 px-4 text-left">Comparative</th>
+            <th class="py-3 px-4 text-left rounded-tr-lg">Superlative</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100">
+          <tr class="bg-slate-50">
+            <td class="py-3 px-4">1 syllable &mdash; <span class="font-mono text-indigo-600">tall</span></td>
+            <td class="py-3 px-4 font-mono">tall<b>er</b></td>
+            <td class="py-3 px-4 font-mono">the tall<b>est</b></td>
+          </tr>
+          <tr>
+            <td class="py-3 px-4">1 syllable, CVC &mdash; <span class="font-mono text-indigo-600">big</span></td>
+            <td class="py-3 px-4 font-mono">big<b>ger</b></td>
+            <td class="py-3 px-4 font-mono">the big<b>gest</b></td>
+          </tr>
+          <tr class="bg-slate-50">
+            <td class="py-3 px-4">2 syllables, ending -y &mdash; <span class="font-mono text-indigo-600">happy</span></td>
+            <td class="py-3 px-4 font-mono">happ<b>ier</b></td>
+            <td class="py-3 px-4 font-mono">the happ<b>iest</b></td>
+          </tr>
+          <tr>
+            <td class="py-3 px-4">2+ syllables &mdash; <span class="font-mono text-indigo-600">interesting</span></td>
+            <td class="py-3 px-4 font-mono"><b>more</b> interesting</td>
+            <td class="py-3 px-4 font-mono">the <b>most</b> interesting</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+      <h3 class="font-display font-bold text-xl text-indigo-900 mb-4"><i class="fa-solid fa-star text-indigo-500 mr-2"></i>Irregular Adjectives</h3>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
+        <div class="rounded-2xl bg-indigo-50 p-4">
+          <p class="font-semibold text-indigo-900">good</p>
+          <p class="text-slate-500">better &rarr; the best</p>
+        </div>
+        <div class="rounded-2xl bg-indigo-50 p-4">
+          <p class="font-semibold text-indigo-900">bad</p>
+          <p class="text-slate-500">worse &rarr; the worst</p>
+        </div>
+        <div class="rounded-2xl bg-indigo-50 p-4">
+          <p class="font-semibold text-indigo-900">far</p>
+          <p class="text-slate-500">further &rarr; the furthest</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="subtab-panel" data-subtab-panel="practice" data-module="3">
+    <div id="quiz-m3" class="space-y-6"></div>
+  </div>
+
+</section>
+
+<!-- Submit -->
+<div class="mt-14 flex flex-col items-center gap-3 text-center">
+  <button id="submit-quiz-btn" class="btn-chunky inline-flex items-center gap-3 bg-fuchsia-500 hover:bg-fuchsia-500 text-white font-bold px-8 py-4 rounded-2xl transition duration-300 text-lg" style="--chunky-shadow:#a21caf">
+    <i class="fa-solid fa-trophy"></i> Submit Quiz &amp; See My Results!
+  </button>
+  <p class="text-sm text-slate-400">You can submit any time &mdash; unanswered questions just count as incorrect. 😊</p>
+</div>
+
+</main>
+
+<!-- ============ FLOATING SCOREBOARD ============ -->
+<div id="scoreboard" class="fixed bottom-3 right-3 sm:bottom-5 sm:right-5 z-50 select-none">
+  <div class="bg-white rounded-3xl shadow-2xl border-2 border-violet-100 p-3 sm:p-4 flex items-center gap-3 sm:gap-4 w-[175px] sm:w-[245px] transition duration-300">
+    <div class="relative w-11 h-11 sm:w-16 sm:h-16 flex-shrink-0">
+      <svg viewBox="0 0 64 64" class="w-11 h-11 sm:w-16 sm:h-16 -rotate-90">
+        <circle cx="32" cy="32" r="27" fill="none" stroke-width="7" class="ring-bg"></circle>
+        <circle id="ring-fg" cx="32" cy="32" r="27" fill="none" stroke-width="7" stroke-linecap="round" class="ring-fg" stroke-dasharray="169.6" stroke-dashoffset="169.6"></circle>
+      </svg>
+      <div class="absolute inset-0 flex items-center justify-center text-[9px] sm:text-xs font-bold text-indigo-700" id="progress-pct">0%</div>
+    </div>
+    <div>
+      <p class="text-[9px] sm:text-[11px] uppercase tracking-widest text-fuchsia-400 font-bold flex items-center gap-1"><i class="fa-solid fa-star text-sunny"></i>Score</p>
+      <p class="font-display font-bold text-base sm:text-xl text-indigo-950"><span id="score-current">0</span>/15</p>
+      <p class="text-[9px] sm:text-[11px] text-slate-400 mt-0.5"><span id="progress-answered">0</span> of 15 done</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============ RESULTS MODAL ============ -->
+<div id="results-modal" class="fixed inset-0 z-[60] hidden items-center justify-center bg-indigo-950/70 backdrop-blur-sm p-4">
+  <div id="results-card" class="bg-white rounded-3xl shadow-2xl max-w-lg w-full p-8 relative max-h-[90vh] overflow-y-auto overflow-x-hidden pop-in">
+    <button id="close-modal" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600 transition duration-300">
+      <i class="fa-solid fa-xmark text-xl"></i>
+    </button>
+
+    <div class="text-center">
+      <div id="grade-badge" class="w-24 h-24 rounded-full mx-auto flex items-center justify-center letter-badge text-4xl font-bold bg-indigo-100 text-indigo-700 border-4 border-white shadow-lg">A</div>
+      <h3 class="font-display font-bold text-2xl text-indigo-950 mt-4">Quiz Complete! 🎓</h3>
+      <p id="final-score-text" class="text-slate-500 mt-1">You scored 0 out of 15</p>
+      <p id="motivation-text" class="text-fuchsia-600 font-bold mt-2">&nbsp;</p>
+    </div>
+
+    <div class="mt-6 space-y-3">
+      <div class="flex items-center justify-between text-sm bg-emerald-50 rounded-2xl px-4 py-3">
+        <span class="font-bold text-slate-600"><i class="fa-solid fa-shapes text-emerald-500 mr-2"></i>Module 1 &mdash; Intro</span>
+        <span id="score-mod-1" class="font-bold text-indigo-900">0/5</span>
+      </div>
+      <div class="flex items-center justify-between text-sm bg-sky-50 rounded-2xl px-4 py-3">
+        <span class="font-bold text-slate-600"><i class="fa-solid fa-clock-rotate-left text-indigo-500 mr-2"></i>Module 2 &mdash; Unit 3</span>
+        <span id="score-mod-2" class="font-bold text-indigo-900">0/5</span>
+      </div>
+      <div class="flex items-center justify-between text-sm bg-rose-50 rounded-2xl px-4 py-3">
+        <span class="font-bold text-slate-600"><i class="fa-solid fa-scale-balanced text-rose-500 mr-2"></i>Module 3 &mdash; Unit 4</span>
+        <span id="score-mod-3" class="font-bold text-indigo-900">0/5</span>
+      </div>
+    </div>
+
+    <div class="mt-7 flex gap-3">
+      <button id="reset-quiz-btn" class="btn-chunky flex-1 inline-flex items-center justify-center gap-2 bg-rose-50 hover:bg-rose-50 text-rose-600 font-bold px-5 py-3 rounded-2xl transition duration-300" style="--chunky-shadow:#fecdd3">
+        <i class="fa-solid fa-rotate-left"></i> Reset Quiz
+      </button>
+      <button id="close-modal-2" class="btn-chunky flex-1 inline-flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-600 text-white font-bold px-5 py-3 rounded-2xl transition duration-300" style="--chunky-shadow:#312e81">
+        Review Answers
+      </button>
+    </div>
+  </div>
+</div>
+
+<footer class="bg-indigo-950 text-indigo-300 text-center text-sm py-6">
+  <p>Made for grammar practice &middot; Interactive English Grammar Masterclass ✨</p>
+</footer>
+
+<script>
+/* ============================================================
+   QUESTION DATA
+   ============================================================ */
+const QUESTIONS = {
+  1: [
+    {
+      id: 'm1q1', type: 'mc',
+      prompt: "What is the correct plural form of <span class='font-mono text-indigo-700'>man</span>?",
+      options: ['mans', 'mens', 'men', 'manes'],
+      answer: 'men',
+      explanation: "\"Man\" has an irregular plural: <b>man &rarr; men</b>. It doesn't follow the regular -s pattern."
+    },
+    {
+      id: 'm1q2', type: 'fill',
+      prompt: "She has two ______ . <span class='text-slate-400'>(baby)</span>",
+      answer: 'babies',
+      explanation: "When a noun ends in a consonant + <b>y</b>, change the <b>y</b> to <b>i</b> and add <b>-es</b>: baby &rarr; bab<b>ies</b>."
+    },
+    {
+      id: 'm1q3', type: 'dropdown',
+      prompt: "______ shoes on my feet right now are brand new.",
+      options: ['This', 'That', 'These', 'Those'],
+      answer: 'These',
+      explanation: "\"Shoes\" is plural and they are near the speaker (on my feet right now), so we use <b>These</b>."
+    },
+    {
+      id: 'm1q4', type: 'mc',
+      prompt: "Choose the correct negative imperative:",
+      options: ["Don't running in the hallway.", "Don't run in the hallway.", "Not run in the hallway.", "Doesn't run in the hallway."],
+      answer: "Don't run in the hallway.",
+      explanation: "Negative imperatives use <b>Don't + base verb</b> (no -ing, no 3rd person -s): \"Don't run.\""
+    },
+    {
+      id: 'm1q5', type: 'fill',
+      prompt: "Please ______ the window. <span class='text-slate-400'>(open)</span>",
+      answer: 'open',
+      explanation: "Affirmative imperatives use the <b>base form</b> of the verb with no subject: \"Open the window.\""
+    },
+  ],
+  2: [
+    {
+      id: 'm2q1', type: 'mc',
+      prompt: "Which is the correct -ing form of <span class='font-mono text-indigo-700'>write</span>?",
+      options: ['writeing', 'writting', 'writing', 'wrieing'],
+      answer: 'writing',
+      explanation: "Drop the silent <b>-e</b> before adding <b>-ing</b>: writ<span class='line-through'>e</span> &rarr; writ<b>ing</b>."
+    },
+    {
+      id: 'm2q2', type: 'fill',
+      prompt: "Look! It ______ outside. <span class='text-slate-400'>(rain)</span>",
+      answer: 'is raining',
+      explanation: "\"Look!\" signals an action happening right now, so we use Present Continuous: <b>is raining</b>."
+    },
+    {
+      id: 'm2q3', type: 'dropdown',
+      prompt: "I ______ the answer to this question.",
+      options: ['know', 'am knowing', 'knows', 'is knowing'],
+      answer: 'know',
+      explanation: "\"Know\" is a <b>stative verb</b> (mental state). Stative verbs are not used in the -ing form: use Present Simple, \"I know\"."
+    },
+    {
+      id: 'm2q4', type: 'mc',
+      prompt: "Which sentence correctly uses a routine time expression?",
+      options: ['He is walking to school every day.', 'He walks to school every day.', 'He walking to school every day.', 'He walk to school every day.'],
+      answer: 'He walks to school every day.',
+      explanation: "\"Every day\" signals a habit, so we use <b>Present Simple</b>: \"He walks to school every day.\""
+    },
+    {
+      id: 'm2q5', type: 'fill',
+      prompt: "They are ______ at the red light right now. <span class='text-slate-400'>(stop)</span>",
+      answer: 'stopping',
+      explanation: "1-syllable verb ending in a single vowel + consonant &mdash; double the final consonant: stop &rarr; stop<b>p</b>ing."
+    },
+  ],
+  3: [
+    {
+      id: 'm3q1', type: 'mc',
+      prompt: "What is the comparative form of <span class='font-mono text-indigo-700'>good</span>?",
+      options: ['gooder', 'more good', 'better', 'best'],
+      answer: 'better',
+      explanation: "\"Good\" is irregular: <b>good &rarr; better &rarr; the best</b>. It doesn't take -er or more."
+    },
+    {
+      id: 'm3q2', type: 'fill',
+      prompt: "This book is ______ than that one. <span class='text-slate-400'>(interesting)</span>",
+      answer: 'more interesting',
+      explanation: "Adjectives with 2+ syllables (like \"interesting\") form the comparative with <b>more</b> + adjective + than."
+    },
+    {
+      id: 'm3q3', type: 'dropdown',
+      prompt: "Of all the planets, Neptune is the ______ from the sun.",
+      options: ['far', 'farer', 'furthest', 'more far'],
+      answer: 'furthest',
+      explanation: "\"Far\" is irregular: <b>far &rarr; further &rarr; the furthest</b>."
+    },
+    {
+      id: 'm3q4', type: 'mc',
+      prompt: "Choose the correct comparative of <span class='font-mono text-indigo-700'>big</span>:",
+      options: ['bigger', 'biger', 'more big', 'biggest'],
+      answer: 'bigger',
+      explanation: "1-syllable adjective ending in a single vowel + consonant &mdash; double the final consonant: big &rarr; big<b>g</b>er."
+    },
+    {
+      id: 'm3q5', type: 'fill',
+      prompt: "Mount Everest is the ______ mountain in the world. <span class='text-slate-400'>(tall)</span>",
+      answer: 'tallest',
+      explanation: "For 1-syllable adjectives, the superlative is formed with <b>the</b> + adjective + <b>-est</b>: the tall<b>est</b>."
+    },
+  ],
+};
+
+/* ============================================================
+   STATE
+   ============================================================ */
+const results = {}; // { qid: true/false }
+const TOTAL_QUESTIONS = 15;
+
+/* ============================================================
+   RENDER QUESTIONS
+   ============================================================ */
+function renderQuestions() {
+  Object.keys(QUESTIONS).forEach(modNum => {
+    const container = document.getElementById(`quiz-m${modNum}`);
+    container.innerHTML = '';
+    QUESTIONS[modNum].forEach((q, idx) => {
+      container.appendChild(buildQuestionCard(q, idx + 1, modNum));
+    });
+  });
+}
+
+function buildQuestionCard(q, num, modNum) {
+  const card = document.createElement('div');
+  card.className = 'bg-white rounded-3xl border-2 border-violet-100 p-6 shadow-md';
+  card.id = `card-${q.id}`;
+
+  const typeLabel = { mc: 'Multiple Choice', fill: 'Fill in the Blank', dropdown: 'Choose the Alternative' }[q.type];
+  const typeIcon = { mc: 'fa-list-check', fill: 'fa-keyboard', dropdown: 'fa-caret-down' }[q.type];
+
+  let inputHtml = '';
+  if (q.type === 'mc') {
+    inputHtml = `<div class="grid sm:grid-cols-2 gap-3 mt-4">` + q.options.map((opt, i) => `
+      <div class="option-card">
+        <input type="radio" name="${q.id}" id="${q.id}-opt${i}" value="${escapeHtml(opt)}" class="sr-only peer">
+        <label for="${q.id}-opt${i}" class="cursor-pointer block border-2 border-slate-200 rounded-2xl px-4 py-3 text-sm font-semibold text-slate-600 hover:border-violet-300 hover:bg-violet-50 transition duration-300">
+          ${opt}
+        </label>
+      </div>`).join('') + `</div>`;
+  } else if (q.type === 'fill') {
+    inputHtml = `<input type="text" id="${q.id}-input" placeholder="Type your answer here..."
+      class="mt-4 w-full border-2 border-slate-200 rounded-2xl px-4 py-3 text-sm font-semibold text-slate-700 transition duration-300">`;
+  } else if (q.type === 'dropdown') {
+    inputHtml = `<select id="${q.id}-input" class="mt-4 w-full border-2 border-slate-200 rounded-2xl px-4 py-3 text-sm font-semibold text-slate-700 bg-white transition duration-300">
+      <option value="" disabled selected>Select the correct option...</option>
+      ${q.options.map(opt => `<option value="${escapeHtml(opt)}">${opt}</option>`).join('')}
+    </select>`;
+  }
+
+  card.innerHTML = `
+    <div class="flex items-center justify-between mb-1">
+      <span class="text-xs font-bold uppercase tracking-widest text-fuchsia-500">🌟 Question ${num} of 5</span>
+      <span class="text-xs font-bold text-violet-400 flex items-center gap-1.5 bg-violet-50 rounded-full px-3 py-1"><i class="fa-solid ${typeIcon}"></i>${typeLabel}</span>
+    </div>
+    <p class="text-lg font-semibold text-slate-800 mt-3 leading-relaxed">${q.prompt}</p>
+    ${inputHtml}
+    <div class="mt-5 flex items-center gap-3 flex-wrap">
+      <button data-check="${q.id}" data-mod="${modNum}" class="check-btn btn-chunky inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-600 text-white font-bold px-5 py-2.5 rounded-2xl transition duration-300 text-sm" style="--chunky-shadow:#312e81">
+        <i class="fa-solid fa-circle-check"></i> Check Answer
+      </button>
+      <span id="${q.id}-status" class="text-sm font-bold"></span>
+    </div>
+    <div id="${q.id}-feedback" class="feedback-box hidden mt-4 rounded-2xl p-4 text-sm"></div>
+  `;
+  return card;
+}
+
+function escapeHtml(str) {
+  return str.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+/* ============================================================
+   CHECK ANSWER LOGIC
+   ============================================================ */
+function checkAnswer(qid, modNum) {
+  const q = QUESTIONS[modNum].find(item => item.id === qid);
+  let userAnswer = null;
+  let isCorrect = false;
+
+  if (q.type === 'mc') {
+    const selected = document.querySelector(`input[name="${qid}"]:checked`);
+    userAnswer = selected ? selected.value : null;
+    if (!userAnswer) { flashNoAnswer(qid); return; }
+    isCorrect = userAnswer === q.answer;
+
+    document.querySelectorAll(`input[name="${qid}"]`).forEach(inp => {
+      const label = document.querySelector(`label[for="${inp.id}"]`);
+      label.classList.remove('border-indigo-600', 'bg-indigo-50');
+      if (inp.value === q.answer) {
+        label.classList.add('border-emerald-500', 'bg-emerald-50', 'text-emerald-700');
+      } else if (inp.checked) {
+        label.classList.add('border-rose-500', 'bg-rose-50', 'text-rose-700');
+      }
+      inp.disabled = true;
+    });
+  } else {
+    const input = document.getElementById(`${qid}-input`);
+    userAnswer = input.value.trim();
+    if (!userAnswer) { flashNoAnswer(qid); return; }
+    isCorrect = userAnswer.toLowerCase() === q.answer.toLowerCase();
+    input.disabled = true;
+    input.classList.remove('border-slate-200');
+    input.classList.add(isCorrect ? 'border-emerald-500' : 'border-rose-500', isCorrect ? 'bg-emerald-50' : 'bg-rose-50');
+  }
+
+  results[qid] = isCorrect;
+
+  // disable check button
+  const btn = document.querySelector(`button[data-check="${qid}"]`);
+  btn.disabled = true;
+  btn.classList.add('opacity-50', 'cursor-not-allowed');
+
+  const status = document.getElementById(`${qid}-status`);
+  status.innerHTML = isCorrect
+    ? `<span class="text-emerald-600"><i class="fa-solid fa-star"></i> Nice one! Correct! 🎉</span>`
+    : `<span class="text-rose-500"><i class="fa-solid fa-circle-xmark"></i> Oops, not quite!</span>`;
+
+  const feedback = document.getElementById(`${qid}-feedback`);
+  feedback.classList.remove('hidden');
+  feedback.classList.add(isCorrect ? 'bg-emerald-50' : 'bg-rose-50', isCorrect ? 'text-emerald-800' : 'text-rose-800');
+  const correctLine = isCorrect ? '' : `<p class="font-bold mb-1">✏️ Correct answer: <span class="font-mono">${q.answer}</span></p>`;
+  feedback.innerHTML = `${correctLine}<p>${q.explanation}</p>`;
+
+  const cardEl = document.getElementById(`card-${qid}`);
+  if (isCorrect) {
+    cardEl.classList.add('correct-flash');
+    burstConfetti(cardEl);
+  } else {
+    cardEl.classList.add('wrong-shake');
+    setTimeout(() => cardEl.classList.remove('wrong-shake'), 450);
+  }
+
+  updateScoreboard();
+}
+
+/* little confetti burst near a card when the answer is right */
+function burstConfetti(anchorEl) {
+  const colors = ['#ff8fab', '#ffc94b', '#5ec8f2', '#4fd1a5', '#a78bfa'];
+  const holder = document.createElement('div');
+  holder.style.position = 'absolute';
+  holder.style.left = '0';
+  holder.style.right = '0';
+  holder.style.top = '0';
+  holder.style.height = '0';
+  holder.style.overflow = 'visible';
+  holder.style.pointerEvents = 'none';
+  anchorEl.style.position = 'relative';
+  anchorEl.appendChild(holder);
+
+  for (let i = 0; i < 16; i++) {
+    const piece = document.createElement('span');
+    piece.className = 'confetti-piece';
+    piece.style.left = `${Math.random() * 100}%`;
+    piece.style.width = `${5 + Math.random() * 4}px`;
+    piece.style.height = `${8 + Math.random() * 5}px`;
+    piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+    piece.style.animationDuration = `${0.9 + Math.random() * 0.6}s`;
+    piece.style.animationDelay = `${Math.random() * 0.15}s`;
+    holder.appendChild(piece);
+  }
+  setTimeout(() => holder.remove(), 1800);
+}
+
+function flashNoAnswer(qid) {
+  const status = document.getElementById(`${qid}-status`);
+  status.innerHTML = `<span class="text-amber-500"><i class="fa-solid fa-hand-point-up"></i> Pick an answer first! 👀</span>`;
+  setTimeout(() => { status.innerHTML = ''; }, 1800);
+}
+
+/* ============================================================
+   SCOREBOARD
+   ============================================================ */
+function updateScoreboard() {
+  const answered = Object.keys(results).length;
+  const correct = Object.values(results).filter(Boolean).length;
+  const pct = Math.round((answered / TOTAL_QUESTIONS) * 100);
+
+  document.getElementById('score-current').textContent = correct;
+  document.getElementById('progress-answered').textContent = answered;
+  document.getElementById('progress-pct').textContent = `${pct}%`;
+
+  const circumference = 169.6;
+  const offset = circumference - (circumference * pct / 100);
+  document.getElementById('ring-fg').setAttribute('stroke-dashoffset', offset);
+}
+
+/* ============================================================
+   TAB SWITCHING
+   ============================================================ */
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const mod = btn.dataset.module;
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active-tab'));
+    btn.classList.add('active-tab');
+    document.querySelectorAll('.module-panel').forEach(p => p.classList.remove('active'));
+    document.querySelector(`[data-module-panel="${mod}"]`).classList.add('active');
+    window.scrollTo({ top: document.getElementById('modules').offsetTop - 10, behavior: 'smooth' });
+  });
+});
+
+document.querySelectorAll('.subtab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const mod = btn.dataset.module;
+    const sub = btn.dataset.subtab;
+    const parent = btn.closest('[data-module-panel]');
+    parent.querySelectorAll('.subtab-btn').forEach(b => b.classList.remove('active-subtab'));
+    btn.classList.add('active-subtab');
+    parent.querySelectorAll('.subtab-panel').forEach(p => p.classList.remove('active'));
+    parent.querySelector(`[data-subtab-panel="${sub}"][data-module="${mod}"]`).classList.add('active');
+  });
+});
+
+/* delegate check-answer clicks */
+document.addEventListener('click', e => {
+  const btn = e.target.closest('.check-btn');
+  if (btn) checkAnswer(btn.dataset.check, btn.dataset.mod);
+});
+
+/* ============================================================
+   SUBMIT / MODAL / RESET
+   ============================================================ */
+function computeModuleScore(modNum) {
+  return QUESTIONS[modNum].reduce((sum, q) => sum + (results[q.id] ? 1 : 0), 0);
+}
+
+function letterGrade(pct) {
+  if (pct >= 90) return { letter: 'A', color: 'bg-emerald-100 text-emerald-700', msg: 'Wow, amazing job! You\'ve totally nailed these rules! 🌟', celebrate: true };
+  if (pct >= 80) return { letter: 'B', color: 'bg-indigo-100 text-indigo-700', msg: 'Great work! Just a couple of details to polish. 💪', celebrate: true };
+  if (pct >= 70) return { letter: 'C', color: 'bg-amber-100 text-amber-700', msg: 'Good effort! Peek back at the missed rules and try again. 📚', celebrate: false };
+  if (pct >= 60) return { letter: 'D', color: 'bg-orange-100 text-orange-700', msg: 'You\'re getting there — revisit the lessons above and go again! 🌱', celebrate: false };
+  return { letter: 'F', color: 'bg-rose-100 text-rose-700', msg: 'Don\'t give up! Review the lessons and try again — you got this! 🙌', celebrate: false };
+}
+
+document.getElementById('submit-quiz-btn').addEventListener('click', () => {
+  const m1 = computeModuleScore(1), m2 = computeModuleScore(2), m3 = computeModuleScore(3);
+  const total = m1 + m2 + m3;
+  const pct = Math.round((total / TOTAL_QUESTIONS) * 100);
+  const grade = letterGrade(pct);
+
+  document.getElementById('score-mod-1').textContent = `${m1}/5`;
+  document.getElementById('score-mod-2').textContent = `${m2}/5`;
+  document.getElementById('score-mod-3').textContent = `${m3}/5`;
+  document.getElementById('final-score-text').textContent = `You scored ${total} out of ${TOTAL_QUESTIONS} (${pct}%)`;
+  document.getElementById('motivation-text').textContent = grade.msg;
+
+  const badge = document.getElementById('grade-badge');
+  badge.textContent = grade.letter;
+  badge.className = `w-24 h-24 rounded-full mx-auto flex items-center justify-center letter-badge text-4xl font-bold border-4 border-white shadow-lg ${grade.color}`;
+
+  const modal = document.getElementById('results-modal');
+  modal.classList.remove('hidden');
+  modal.classList.add('flex');
+
+  if (grade.celebrate) {
+    const card = document.getElementById('results-card');
+    setTimeout(() => burstConfetti(card), 150);
+  }
+});
+
+function closeModal() {
+  const modal = document.getElementById('results-modal');
+  modal.classList.add('hidden');
+  modal.classList.remove('flex');
+}
+document.getElementById('close-modal').addEventListener('click', closeModal);
+document.getElementById('close-modal-2').addEventListener('click', closeModal);
+document.getElementById('results-modal').addEventListener('click', e => {
+  if (e.target.id === 'results-modal') closeModal();
+});
+
+document.getElementById('reset-quiz-btn').addEventListener('click', () => {
+  Object.keys(results).forEach(k => delete results[k]);
+  renderQuestions();
+  updateScoreboard();
+  closeModal();
+  document.querySelectorAll('.tab-btn')[0].click();
+  document.querySelector('.subtab-btn[data-subtab="learn"][data-module="1"]').click();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+/* ============================================================
+   INIT
+   ============================================================ */
+renderQuestions();
+updateScoreboard();
+</script>
+
+</body>
+</html>
