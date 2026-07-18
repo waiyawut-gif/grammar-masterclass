@@ -1,1029 +1,1289 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Interactive English Grammar Masterclass</title>
-
-<script src="https://cdn.tailwindcss.com"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Quicksand:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
-
-<script>
-  tailwind.config = {
-    theme: {
-      extend: {
-        fontFamily: {
-          display: ['Baloo 2', 'cursive'],
-          sans: ['Quicksand', 'sans-serif'],
-          mono: ['JetBrains Mono', 'monospace'],
-        },
-        colors: {
-          ink: '#1e1b4b',
-          bubble: '#ff8fab',
-          sunny: '#ffc94b',
-          aqua: '#5ec8f2',
-          mint: '#4fd1a5',
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive English Grammar Masterclass - EN21101 English 1</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- FontAwesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            scroll-behavior: smooth;
         }
-      }
-    }
-  }
-</script>
-
-<style>
-  html { scroll-behavior: smooth; }
-  body {
-    font-family: 'Quicksand', sans-serif;
-    background-color: #fbf7ff;
-    background-image:
-      radial-gradient(circle at 8% 15%, rgba(94,200,242,0.12) 0, transparent 40%),
-      radial-gradient(circle at 92% 25%, rgba(255,143,171,0.14) 0, transparent 40%),
-      radial-gradient(circle at 50% 85%, rgba(79,209,165,0.10) 0, transparent 45%);
-  }
-  .font-display { font-family: 'Baloo 2', cursive; }
-
-  ::selection { background-color: #ffe1ea; }
-
-  /* Custom scrollbar */
-  ::-webkit-scrollbar { width: 10px; height: 10px; }
-  ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: #c7d2fe; border-radius: 10px; }
-
-  /* Tab panels */
-  .module-panel { display: none; }
-  .module-panel.active { display: block; animation: fadeSlide 0.45s ease; }
-  @keyframes fadeSlide {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .tab-btn { position: relative; }
-  .tab-btn.active-tab {
-    background-color: #4338ca;
-    color: white;
-    box-shadow: 0 6px 0 0 #312e81;
-    transform: translateY(-2px);
-  }
-  .tab-btn:not(.active-tab) { box-shadow: 0 4px 0 0 #e0e7ff; }
-  .tab-btn:not(.active-tab):hover { background-color: #eef2ff; transform: translateY(-2px); }
-  .tab-btn:active { transform: translateY(1px); }
-
-  .subtab-btn.active-subtab {
-    border-bottom-color: #4338ca;
-    color: #312e81;
-  }
-
-  .q-panel { display: none; }
-  .q-panel.active { display: block; }
-
-  /* progress ring */
-  .ring-bg { stroke: #e0e7ff; }
-  .ring-fg { stroke: #4338ca; transition: stroke-dashoffset 0.6s ease; }
-
-  .feedback-box { transition: all 0.3s ease; }
-
-  .option-card input:checked + label {
-    border-color: #4338ca;
-    background-color: #eef2ff;
-    box-shadow: 0 0 0 2px #c7d2fe;
-  }
-  .option-card input:focus-visible + label {
-    outline: none;
-    box-shadow: 0 0 0 3px #a5b4fc;
-    border-color: #4338ca;
-  }
-
-  .correct-flash { animation: pop 0.4s ease; }
-  @keyframes pop { 0% { transform: scale(1); } 40% { transform: scale(1.02); } 100% { transform: scale(1); } }
-
-  .wrong-shake { animation: shake 0.4s ease; }
-  @keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    20% { transform: translateX(-6px); }
-    40% { transform: translateX(6px); }
-    60% { transform: translateX(-4px); }
-    80% { transform: translateX(4px); }
-  }
-
-  .grain {
-    background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.14) 1px, transparent 0);
-    background-size: 18px 18px;
-  }
-
-  /* chunky 3D press buttons */
-  .btn-chunky {
-    box-shadow: 0 5px 0 0 var(--chunky-shadow, #3730a3);
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
-  }
-  .btn-chunky:hover:not(:disabled) { transform: translateY(-2px); }
-  .btn-chunky:active:not(:disabled), .btn-chunky:disabled {
-    transform: translateY(3px);
-    box-shadow: 0 2px 0 0 var(--chunky-shadow, #3730a3);
-  }
-
-  /* floating decorative blobs */
-  .float-slow { animation: floaty 7s ease-in-out infinite; }
-  .float-slow-rev { animation: floaty 8s ease-in-out infinite reverse; }
-  @keyframes floaty {
-    0%, 100% { transform: translateY(0) rotate(0deg); }
-    50% { transform: translateY(-14px) rotate(6deg); }
-  }
-
-  .wiggle-hover:hover { animation: wiggle 0.5s ease; }
-  @keyframes wiggle {
-    0%, 100% { transform: rotate(0deg); }
-    25% { transform: rotate(-8deg); }
-    75% { transform: rotate(8deg); }
-  }
-
-  .pop-in { animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
-  @keyframes popIn {
-    0% { transform: scale(0.5); opacity: 0; }
-    100% { transform: scale(1); opacity: 1; }
-  }
-
-  /* confetti */
-  .confetti-piece {
-    position: absolute;
-    top: -10px;
-    border-radius: 2px;
-    animation: confettiFall linear forwards;
-  }
-  @keyframes confettiFall {
-    0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-    100% { transform: translateY(420px) rotate(540deg); opacity: 0; }
-  }
-
-  input[type="text"]:focus, select:focus { outline: none; box-shadow: 0 0 0 3px #ffe1ea; border-color: #ff8fab; }
-
-  .letter-badge { font-family: 'Baloo 2', cursive; }
-
-  @media (prefers-reduced-motion: reduce) {
-    * { animation: none !important; transition: none !important; }
-  }
-</style>
+        
+        .gradient-hero {
+            background: linear-gradient(135deg, #1e293b 0%, #4f46e5 50%, #6366f1 100%);
+        }
+        
+        .module-tab {
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+        }
+        
+        .module-tab.active {
+            border-bottom-color: #10b981;
+            background-color: rgba(16, 185, 129, 0.1);
+        }
+        
+        .question-card {
+            transition: all 0.3s ease;
+            border: 2px solid #e5e7eb;
+        }
+        
+        .question-card:hover {
+            border-color: #4f46e5;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.1);
+        }
+        
+        .answer-correct {
+            background-color: #ecfdf5 !important;
+            border-color: #10b981 !important;
+        }
+        
+        .answer-incorrect {
+            background-color: #fef2f2 !important;
+            border-color: #ef4444 !important;
+        }
+        
+        .teacher-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .teacher-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px rgba(79, 70, 229, 0.15);
+        }
+        
+        .teacher-image {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 12px;
+        }
+    </style>
 </head>
+<body class="bg-gray-50 text-slate-800">
+    
+    <!-- HEADER SECTION: SUBJECT CODE & TEACHERS -->
+    <section class="bg-white shadow-lg border-b-4 border-indigo-600">
+        <div class="max-w-7xl mx-auto px-4 py-10">
+            <!-- Subject Title -->
+            <div class="text-center mb-10">
+                <h1 class="text-5xl md:text-6xl font-bold text-indigo-600 mb-3">
+                    <i class="fas fa-book-reader"></i> EN21101 English 1
+                </h1>
+                <p class="text-2xl text-gray-700 font-semibold">Interactive English Grammar Masterclass</p>
+            </div>
 
-<body class="text-slate-800 antialiased">
+            <!-- Teachers Section -->
+            <div class="border-t-4 border-indigo-200 pt-10">
+                <h2 class="text-3xl font-bold text-slate-800 text-center mb-10">
+                    <i class="fas fa-chalkboard-user text-indigo-600"></i> Course Instructors
+                </h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Teacher 1: T.Chinta -->
+                    <div class="teacher-card bg-gradient-to-b from-indigo-50 to-white rounded-xl overflow-hidden shadow-md border border-indigo-100">
+                        <div class="overflow-hidden bg-gray-200 h-80">
+                            <img src="https://via.placeholder.com/350x400/4f46e5/ffffff?text=T.Chinta" alt="T.Chinta" class="teacher-image w-full h-full object-cover">
+                        </div>
+                        <div class="p-6 text-center">
+                            <h3 class="text-2xl font-bold text-indigo-600 mb-2">T.Chinta</h3>
+                            <p class="text-base text-gray-600 mb-4 font-semibold">Grammar Specialist</p>
+                            <div class="flex flex-wrap justify-center gap-2 mb-3">
+                                <span class="bg-indigo-100 text-indigo-700 text-xs font-bold px-3 py-1.5 rounded-full">Module 1 & 2</span>
+                                <span class="bg-indigo-100 text-indigo-700 text-xs font-bold px-3 py-1.5 rounded-full">Nouns & Tenses</span>
+                            </div>
+                            <div class="flex items-center justify-center gap-2 text-sm text-gray-500">
+                                <i class="fas fa-star text-yellow-400"></i>
+                                <span>Expert in Basics</span>
+                            </div>
+                        </div>
+                    </div>
 
-<!-- ============ HERO ============ -->
-<header class="relative overflow-hidden bg-gradient-to-br from-indigo-700 via-violet-600 to-fuchsia-500 text-white">
-  <div class="absolute inset-0 grain opacity-30"></div>
-  <div class="absolute -top-20 -right-16 w-80 h-80 bg-sunny/40 rounded-full blur-3xl"></div>
-  <div class="absolute -bottom-24 -left-10 w-96 h-96 bg-aqua/30 rounded-full blur-3xl"></div>
+                    <!-- Teacher 2: T.Fluk -->
+                    <div class="teacher-card bg-gradient-to-b from-emerald-50 to-white rounded-xl overflow-hidden shadow-md border border-emerald-100">
+                        <div class="overflow-hidden bg-gray-200 h-80">
+                            <img src="https://via.placeholder.com/350x400/10b981/ffffff?text=T.Fluk" alt="T.Fluk" class="teacher-image w-full h-full object-cover">
+                        </div>
+                        <div class="p-6 text-center">
+                            <h3 class="text-2xl font-bold text-emerald-600 mb-2">T.Fluk</h3>
+                            <p class="text-base text-gray-600 mb-4 font-semibold">Language Expert</p>
+                            <div class="flex flex-wrap justify-center gap-2 mb-3">
+                                <span class="bg-emerald-100 text-emerald-700 text-xs font-bold px-3 py-1.5 rounded-full">Module 2 & 3</span>
+                                <span class="bg-emerald-100 text-emerald-700 text-xs font-bold px-3 py-1.5 rounded-full">Advanced Topics</span>
+                            </div>
+                            <div class="flex items-center justify-center gap-2 text-sm text-gray-500">
+                                <i class="fas fa-star text-yellow-400"></i>
+                                <span>Tense Specialist</span>
+                            </div>
+                        </div>
+                    </div>
 
-  <!-- floating doodles -->
-  <i class="fa-solid fa-star text-sunny/80 text-2xl absolute top-24 left-[8%] float-slow hidden sm:block"></i>
-  <i class="fa-solid fa-sparkle text-white/70 text-xl absolute top-16 left-[45%] float-slow-rev hidden md:block"></i>
-  <i class="fa-solid fa-star text-white/60 text-lg absolute top-40 right-[12%] float-slow hidden sm:block"></i>
-  <i class="fa-solid fa-pencil text-sunny/70 text-2xl absolute bottom-28 right-[20%] float-slow-rev hidden md:block"></i>
-  <i class="fa-solid fa-sparkle text-aqua/80 text-lg absolute bottom-16 left-[20%] float-slow hidden sm:block"></i>
-
-  <nav class="relative z-10 max-w-6xl mx-auto px-6 py-6 flex items-center justify-between">
-    <div class="flex items-center gap-2">
-      <div class="w-10 h-10 rounded-2xl bg-white/15 border border-white/30 flex items-center justify-center wiggle-hover">
-        <i class="fa-solid fa-graduation-cap text-sunny"></i>
-      </div>
-      <span class="font-display font-bold text-lg tracking-tight">Grammar Lab</span>
-    </div>
-    <div class="hidden sm:flex items-center gap-2 text-sm text-white/80 bg-white/10 rounded-full px-4 py-1.5 border border-white/20">
-      <i class="fa-regular fa-clock"></i><span>~25 min &middot; 3 modules &middot; 15 questions</span>
-    </div>
-  </nav>
-
-  <div class="relative z-10 max-w-6xl mx-auto px-6 pt-8 pb-24 md:pt-12 md:pb-32 grid md:grid-cols-[1fr_auto] gap-8 items-center">
-    <div>
-      <p class="inline-flex items-center gap-2 text-xs uppercase tracking-[0.15em] text-indigo-950 font-bold mb-5 rounded-full px-3.5 py-1.5 bg-sunny">
-        <i class="fa-solid fa-wand-magic-sparkles"></i> Let's level up your grammar!
-      </p>
-      <h1 class="font-display font-extrabold text-4xl sm:text-5xl md:text-6xl leading-[1.05] max-w-2xl drop-shadow-sm">
-        Interactive English<br> Grammar <span class="text-sunny">Masterclass</span>
-      </h1>
-      <p class="mt-6 text-lg text-white/90 max-w-xl leading-relaxed">
-        Learn the rules, spot right vs. wrong, then prove it with 15 fun challenges on nouns, tenses, and comparisons &mdash; with instant feedback (and a little celebration) every step of the way. 🎉
-      </p>
-      <div class="mt-9 flex flex-wrap items-center gap-4">
-        <a href="#modules" class="btn-chunky group inline-flex items-center gap-3 bg-white hover:bg-white text-indigo-700 font-bold px-7 py-3.5 rounded-2xl transition duration-300" style="--chunky-shadow:#c026d3">
-          Get Started
-          <i class="fa-solid fa-rocket transition duration-300 group-hover:translate-x-1 group-hover:-translate-y-1"></i>
-        </a>
-        <div class="flex items-center gap-3 text-sm text-white/85">
-          <div class="flex -space-x-2">
-            <span class="w-9 h-9 rounded-full bg-emerald-400 border-2 border-violet-600 flex items-center justify-center text-[10px] font-bold text-emerald-950 shadow-sm">M1</span>
-            <span class="w-9 h-9 rounded-full bg-aqua border-2 border-violet-600 flex items-center justify-center text-[10px] font-bold text-indigo-950 shadow-sm">M2</span>
-            <span class="w-9 h-9 rounded-full bg-bubble border-2 border-violet-600 flex items-center justify-center text-[10px] font-bold text-rose-950 shadow-sm">M3</span>
-          </div>
-          <span>Nouns &amp; Imperatives &middot; Present Tenses &middot; Comparisons</span>
+                    <!-- Teacher 3: T.Muk -->
+                    <div class="teacher-card bg-gradient-to-b from-orange-50 to-white rounded-xl overflow-hidden shadow-md border border-orange-100">
+                        <div class="overflow-hidden bg-gray-200 h-80">
+                            <img src="https://via.placeholder.com/350x400/f97316/ffffff?text=T.Muk" alt="T.Muk" class="teacher-image w-full h-full object-cover">
+                        </div>
+                        <div class="p-6 text-center">
+                            <h3 class="text-2xl font-bold text-orange-600 mb-2">T.Muk</h3>
+                            <p class="text-base text-gray-600 mb-4 font-semibold">Adjective & Comparison Expert</p>
+                            <div class="flex flex-wrap justify-center gap-2 mb-3">
+                                <span class="bg-orange-100 text-orange-700 text-xs font-bold px-3 py-1.5 rounded-full">Module 3</span>
+                                <span class="bg-orange-100 text-orange-700 text-xs font-bold px-3 py-1.5 rounded-full">Comparatives</span>
+                            </div>
+                            <div class="flex items-center justify-center gap-2 text-sm text-gray-500">
+                                <i class="fas fa-star text-yellow-400"></i>
+                                <span>Comparison Master</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-
-    <!-- mascot -->
-    <div class="hidden md:block float-slow" aria-hidden="true">
-      <svg width="150" height="150" viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg">
-        <ellipse cx="75" cy="140" rx="45" ry="7" fill="#000" opacity="0.12"/>
-        <circle cx="75" cy="72" r="58" fill="#FFC94B"/>
-        <circle cx="75" cy="72" r="58" fill="none" stroke="#F59E0B" stroke-width="3"/>
-        <circle cx="55" cy="65" r="9" fill="#312e81"/>
-        <circle cx="95" cy="65" r="9" fill="#312e81"/>
-        <circle cx="58" cy="61" r="3" fill="white"/>
-        <circle cx="98" cy="61" r="3" fill="white"/>
-        <path d="M52 92 Q75 112 98 92" stroke="#312e81" stroke-width="5" fill="none" stroke-linecap="round"/>
-        <path d="M28 45 L20 15" stroke="#312e81" stroke-width="5" stroke-linecap="round"/>
-        <path d="M122 45 L130 15" stroke="#312e81" stroke-width="5" stroke-linecap="round"/>
-        <circle cx="20" cy="12" r="6" fill="#FB7185"/>
-        <circle cx="130" cy="12" r="6" fill="#FB7185"/>
-        <rect x="34" y="118" width="82" height="20" rx="10" fill="#4338CA"/>
-        <text x="75" y="132" font-family="Baloo 2, cursive" font-size="12" fill="white" text-anchor="middle" font-weight="700">A+</text>
-      </svg>
-    </div>
-  </div>
-
-  <svg class="absolute bottom-0 left-0 w-full text-[#fbf7ff]" viewBox="0 0 1440 60" fill="currentColor" preserveAspectRatio="none" style="height:48px;">
-    <path d="M0,32 C240,60 480,0 720,20 C960,40 1200,10 1440,30 L1440,60 L0,60 Z"></path>
-  </svg>
-</header>
-
-<!-- ============ TAB NAV (sticky) ============ -->
-<div id="modules" class="sticky top-0 z-40 bg-[#fbf7ff]/95 backdrop-blur-sm border-b border-indigo-100 shadow-sm">
-  <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex gap-3 overflow-x-auto">
-    <button data-module="1" class="tab-btn active-tab flex-shrink-0 flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-full font-bold text-sm text-indigo-700 transition duration-300">
-      <i class="fa-solid fa-shapes"></i> Module 1 &middot; Intro
-    </button>
-    <button data-module="2" class="tab-btn flex-shrink-0 flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-full font-bold text-sm text-indigo-700 transition duration-300">
-      <i class="fa-solid fa-clock-rotate-left"></i> Module 2 &middot; Unit 3
-    </button>
-    <button data-module="3" class="tab-btn flex-shrink-0 flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-full font-bold text-sm text-indigo-700 transition duration-300">
-      <i class="fa-solid fa-scale-balanced"></i> Module 3 &middot; Unit 4
-    </button>
-  </div>
-</div>
-
-<main class="max-w-6xl mx-auto px-4 sm:px-6 py-10 pb-32">
-
-<!-- ================================================================= -->
-<!-- MODULE 1 -->
-<!-- ================================================================= -->
-<section class="module-panel active" data-module-panel="1">
-
-  <div class="mb-8">
-    <span class="text-xs font-bold uppercase tracking-widest text-emerald-600">Module 1</span>
-    <h2 class="font-display font-bold text-3xl text-indigo-950 mt-1">Nouns, Demonstratives &amp; Imperatives</h2>
-    <p class="text-slate-500 mt-2 max-w-2xl">The building blocks: naming one thing vs. many, pointing things out, and giving instructions.</p>
-  </div>
-
-  <!-- sub-tabs -->
-  <div class="flex gap-6 border-b border-slate-200 mb-8">
-    <button class="subtab-btn active-subtab pb-3 border-b-2 border-transparent font-semibold text-slate-500 transition duration-300" data-subtab="learn" data-module="1">
-      <i class="fa-solid fa-book mr-2"></i>Learn &amp; Review
-    </button>
-    <button class="subtab-btn pb-3 border-b-2 border-transparent font-semibold text-slate-500 transition duration-300" data-subtab="practice" data-module="1">
-      <i class="fa-solid fa-pen-to-square mr-2"></i>Practice Exercises
-    </button>
-  </div>
-
-  <!-- LEARN -->
-  <div class="subtab-panel active" data-subtab-panel="learn" data-module="1">
-
-    <div class="grid md:grid-cols-2 gap-6 mb-8">
-      <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
-        <h3 class="font-display font-bold text-xl text-indigo-900 mb-3"><i class="fa-solid fa-layer-group text-indigo-500 mr-2"></i>Regular Plurals</h3>
-        <table class="w-full text-sm">
-          <thead><tr class="text-left text-slate-400 border-b border-slate-100"><th class="py-2">Ending</th><th>Rule</th><th>Example</th></tr></thead>
-          <tbody class="divide-y divide-slate-100">
-            <tr><td class="py-2 font-mono text-indigo-600">most nouns</td><td>+ s</td><td>cat &rarr; cat<b>s</b></td></tr>
-            <tr><td class="py-2 font-mono text-indigo-600">-s, -x, -ch, -sh</td><td>+ es</td><td>box &rarr; box<b>es</b></td></tr>
-            <tr><td class="py-2 font-mono text-indigo-600">consonant + y</td><td>y &rarr; ies</td><td>baby &rarr; bab<b>ies</b></td></tr>
-            <tr><td class="py-2 font-mono text-indigo-600">-f / -fe</td><td>f/fe &rarr; ves</td><td>leaf &rarr; lea<b>ves</b></td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
-        <h3 class="font-display font-bold text-xl text-indigo-900 mb-3"><i class="fa-solid fa-shuffle text-indigo-500 mr-2"></i>Irregular Plurals</h3>
-        <p class="text-sm text-slate-500 mb-3">These don't follow any spelling pattern &mdash; memorize them.</p>
-        <div class="grid grid-cols-2 gap-2 text-sm">
-          <div class="bg-indigo-50 rounded-2xl px-3 py-2 flex justify-between"><span>man</span><i class="fa-solid fa-arrow-right text-indigo-300 mx-1"></i><span class="font-semibold">men</span></div>
-          <div class="bg-indigo-50 rounded-2xl px-3 py-2 flex justify-between"><span>woman</span><i class="fa-solid fa-arrow-right text-indigo-300 mx-1"></i><span class="font-semibold">women</span></div>
-          <div class="bg-indigo-50 rounded-2xl px-3 py-2 flex justify-between"><span>child</span><i class="fa-solid fa-arrow-right text-indigo-300 mx-1"></i><span class="font-semibold">children</span></div>
-          <div class="bg-indigo-50 rounded-2xl px-3 py-2 flex justify-between"><span>person</span><i class="fa-solid fa-arrow-right text-indigo-300 mx-1"></i><span class="font-semibold">people</span></div>
-          <div class="bg-indigo-50 rounded-2xl px-3 py-2 flex justify-between"><span>tooth</span><i class="fa-solid fa-arrow-right text-indigo-300 mx-1"></i><span class="font-semibold">teeth</span></div>
-          <div class="bg-indigo-50 rounded-2xl px-3 py-2 flex justify-between"><span>mouse</span><i class="fa-solid fa-arrow-right text-indigo-300 mx-1"></i><span class="font-semibold">mice</span></div>
+    </section>
+    
+    <!-- HERO SECTION -->
+    <section class="gradient-hero text-white py-16 md:py-24">
+        <div class="max-w-6xl mx-auto px-4 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4 flex items-center justify-center gap-3">
+                <i class="fas fa-book-open"></i> Master English Grammar
+            </h1>
+            <p class="text-lg md:text-xl text-indigo-100 mb-8">
+                Master essential grammar rules with interactive lessons, visual guides, and engaging quizzes. Covering Nouns, Demonstratives, Imperatives, Present Continuous, and Comparatives.
+            </p>
+            <button onclick="document.getElementById('modules-section').scrollIntoView();" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 px-8 rounded-lg transition duration-300 transform hover:scale-105">
+                <i class="fas fa-rocket"></i> Get Started
+            </button>
         </div>
-      </div>
-    </div>
+    </section>
 
-    <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm mb-8">
-      <h3 class="font-display font-bold text-xl text-indigo-900 mb-3"><i class="fa-solid fa-arrows-left-right text-indigo-500 mr-2"></i>Demonstratives</h3>
-      <p class="text-sm text-slate-500 mb-4">Choice depends on two things: is it singular or plural, and is it near or far from you?</p>
-      <div class="overflow-x-auto">
-        <table class="w-full text-sm border-collapse">
-          <thead>
-            <tr class="bg-indigo-600 text-white">
-              <th class="py-3 px-4 text-left rounded-tl-lg">Distance</th>
-              <th class="py-3 px-4 text-left">Singular</th>
-              <th class="py-3 px-4 text-left rounded-tr-lg">Plural</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr class="bg-emerald-50 border-b border-white">
-              <td class="py-3 px-4 font-semibold text-emerald-700"><i class="fa-solid fa-location-dot mr-2"></i>Near</td>
-              <td class="py-3 px-4 font-mono">This</td>
-              <td class="py-3 px-4 font-mono">These</td>
-            </tr>
-            <tr class="bg-amber-50">
-              <td class="py-3 px-4 font-semibold text-amber-700"><i class="fa-solid fa-binoculars mr-2"></i>Far</td>
-              <td class="py-3 px-4 font-mono">That</td>
-              <td class="py-3 px-4 font-mono">Those</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="mt-4 text-sm bg-slate-50 rounded-2xl p-4 text-slate-600">
-        <i class="fa-solid fa-lightbulb text-amber-400 mr-2"></i><b>This</b> pen (in my hand) is better than <b>that</b> pen (over there). <b>These</b> keys (here) open <b>those</b> doors (across the room).
-      </div>
-    </div>
-
-    <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
-      <h3 class="font-display font-bold text-xl text-indigo-900 mb-4"><i class="fa-solid fa-bullhorn text-indigo-500 mr-2"></i>Imperatives</h3>
-      <p class="text-sm text-slate-500 mb-4">Used for commands, instructions, and requests. No subject is needed &mdash; start with the verb.</p>
-      <div class="grid sm:grid-cols-2 gap-4">
-        <div class="rounded-2xl border border-emerald-200 bg-emerald-50 p-4">
-          <p class="text-xs font-bold uppercase text-emerald-600 mb-2"><i class="fa-solid fa-check mr-1"></i>Affirmative &mdash; base verb</p>
-          <p class="font-mono text-sm text-emerald-900">Close the door.</p>
-          <p class="font-mono text-sm text-emerald-900">Sit down, please.</p>
+    <!-- MAIN CONTENT -->
+    <div class="max-w-7xl mx-auto px-4 py-8">
+        
+        <!-- PROGRESS & SCOREBOARD (STICKY) -->
+        <div class="sticky top-0 z-40 bg-white rounded-lg shadow-lg p-6 mb-8 border-l-4 border-indigo-600">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                <div class="flex items-center gap-4">
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-indigo-600" id="current-score">0/15</div>
+                        <p class="text-sm text-gray-600">Current Score</p>
+                    </div>
+                    <div class="h-16 w-1 bg-gray-300"></div>
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-emerald-600" id="progress-percentage">0%</div>
+                        <p class="text-sm text-gray-600">Completed</p>
+                    </div>
+                </div>
+                <button id="submit-btn" onclick="submitQuiz()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded-lg transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                    <i class="fas fa-check-circle"></i> Submit Quiz
+                </button>
+            </div>
         </div>
-        <div class="rounded-2xl border border-rose-200 bg-rose-50 p-4">
-          <p class="text-xs font-bold uppercase text-rose-600 mb-2"><i class="fa-solid fa-ban mr-1"></i>Negative &mdash; Don't + base verb</p>
-          <p class="font-mono text-sm text-rose-900">Don't close the door.</p>
-          <p class="font-mono text-sm text-rose-900">Don't be late.</p>
+
+        <!-- MODULE TABS -->
+        <div id="modules-section" class="mb-8">
+            <div class="flex gap-2 md:gap-4 border-b border-gray-200 overflow-x-auto pb-4">
+                <button onclick="switchModule('module1')" class="module-tab active px-4 py-2 font-bold text-slate-700 whitespace-nowrap">
+                    <i class="fas fa-book"></i> Module 1: Nouns & Basics
+                </button>
+                <button onclick="switchModule('module2')" class="module-tab px-4 py-2 font-bold text-slate-700 whitespace-nowrap">
+                    <i class="fas fa-clock"></i> Module 2: Present Tenses
+                </button>
+                <button onclick="switchModule('module3')" class="module-tab px-4 py-2 font-bold text-slate-700 whitespace-nowrap">
+                    <i class="fas fa-compare"></i> Module 3: Comparatives
+                </button>
+            </div>
         </div>
-      </div>
-      <div class="mt-4 flex items-start gap-3 text-sm bg-rose-50/60 border border-rose-100 rounded-2xl p-4">
-        <i class="fa-solid fa-triangle-exclamation text-rose-400 mt-0.5"></i>
-        <p class="text-slate-600"><span class="font-semibold text-rose-600">Common mistake:</span> "Don't <span class="line-through">running</span>" &mdash; the verb after <span class="font-mono">Don't</span> must stay in its base form: "Don't <b>run</b>."</p>
-      </div>
-    </div>
 
-  </div>
+        <!-- MODULE 1: NOUNS & BASICS -->
+        <div id="module1" class="module-content">
+            <!-- LEARN SECTION -->
+            <div class="mb-12">
+                <h2 class="text-3xl font-bold text-slate-800 mb-6 flex items-center gap-3">
+                    <i class="fas fa-lightbulb text-yellow-500"></i> Learn & Review: Module 1
+                </h2>
+                
+                <!-- PLURALS -->
+                <div class="bg-blue-50 border-l-4 border-blue-500 p-6 rounded-lg mb-6">
+                    <h3 class="text-2xl font-bold text-blue-900 mb-4">
+                        <i class="fas fa-cubes"></i> 1. Regular and Irregular Plurals
+                    </h3>
+                    <p class="text-base text-blue-800 mb-4">Nouns change form to show quantity. Learn the rules:</p>
+                    
+                    <div class="overflow-x-auto mb-4">
+                        <table class="w-full border-collapse">
+                            <thead>
+                                <tr class="bg-blue-200">
+                                    <th class="border border-blue-300 px-4 py-2 text-left font-bold">Rule</th>
+                                    <th class="border border-blue-300 px-4 py-2 text-left font-bold">Pattern</th>
+                                    <th class="border border-blue-300 px-4 py-2 text-left font-bold">Examples</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="border border-blue-300 px-4 py-2"><strong>Add -s</strong></td>
+                                    <td class="border border-blue-300 px-4 py-2">Most nouns</td>
+                                    <td class="border border-blue-300 px-4 py-2">cat → cats, book → books</td>
+                                </tr>
+                                <tr class="bg-blue-100">
+                                    <td class="border border-blue-300 px-4 py-2"><strong>Add -es</strong></td>
+                                    <td class="border border-blue-300 px-4 py-2">s, x, z, ch, sh</td>
+                                    <td class="border border-blue-300 px-4 py-2">box → boxes, dish → dishes</td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-blue-300 px-4 py-2"><strong>Change y → ies</strong></td>
+                                    <td class="border border-blue-300 px-4 py-2">Consonant + y</td>
+                                    <td class="border border-blue-300 px-4 py-2">baby → babies, city → cities</td>
+                                </tr>
+                                <tr class="bg-blue-100">
+                                    <td class="border border-blue-300 px-4 py-2"><strong>Add -s (y)</strong></td>
+                                    <td class="border border-blue-300 px-4 py-2">Vowel + y</td>
+                                    <td class="border border-blue-300 px-4 py-2">boy → boys, key → keys</td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-blue-300 px-4 py-2"><strong>Change f/fe → ves</strong></td>
+                                    <td class="border border-blue-300 px-4 py-2">f or fe ending</td>
+                                    <td class="border border-blue-300 px-4 py-2">knife → knives, wife → wives</td>
+                                </tr>
+                                <tr class="bg-blue-100">
+                                    <td class="border border-blue-300 px-4 py-2"><strong>Irregular</strong></td>
+                                    <td class="border border-blue-300 px-4 py-2">Unique changes</td>
+                                    <td class="border border-blue-300 px-4 py-2">man → men, child → children, person → people</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- DEMONSTRATIVES -->
+                <div class="bg-green-50 border-l-4 border-green-500 p-6 rounded-lg mb-6">
+                    <h3 class="text-2xl font-bold text-green-900 mb-4">
+                        <i class="fas fa-hand-point-right"></i> 2. Demonstratives: This, That, These, Those
+                    </h3>
+                    <p class="text-base text-green-800 mb-4">Use demonstratives to point to or identify things based on distance and number:</p>
+                    
+                    <div class="overflow-x-auto mb-4">
+                        <table class="w-full border-collapse">
+                            <thead>
+                                <tr class="bg-green-200">
+                                    <th class="border border-green-300 px-4 py-2 text-left font-bold"></th>
+                                    <th class="border border-green-300 px-4 py-2 text-left font-bold">SINGULAR (One)</th>
+                                    <th class="border border-green-300 px-4 py-2 text-left font-bold">PLURAL (Many)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="border border-green-300 px-4 py-2 font-bold bg-green-100">NEAR</td>
+                                    <td class="border border-green-300 px-4 py-2"><strong>This</strong> (e.g., this pen)</td>
+                                    <td class="border border-green-300 px-4 py-2"><strong>These</strong> (e.g., these pens)</td>
+                                </tr>
+                                <tr class="bg-green-100">
+                                    <td class="border border-green-300 px-4 py-2 font-bold">FAR</td>
+                                    <td class="border border-green-300 px-4 py-2"><strong>That</strong> (e.g., that pen)</td>
+                                    <td class="border border-green-300 px-4 py-2"><strong>Those</strong> (e.g., those pens)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="bg-gray-100 border-l-4 border-indigo-600 p-4 rounded">
+                        <p class="mb-2">✓ <strong>Correct:</strong> <span class="text-emerald-600">This apple is red. These apples are fresh.</span></p>
+                        <p class="mb-2">✓ <strong>Correct:</strong> <span class="text-emerald-600">That mountain is far. Those mountains are tall.</span></p>
+                        <p>✗ <strong>Incorrect:</strong> <span class="text-rose-600">This apples are red. That apple are fresh.</span></p>
+                    </div>
+                </div>
+                
+                <!-- IMPERATIVES -->
+                <div class="bg-purple-50 border-l-4 border-purple-500 p-6 rounded-lg">
+                    <h3 class="text-2xl font-bold text-purple-900 mb-4">
+                        <i class="fas fa-bullhorn"></i> 3. Imperatives: Commands & Instructions
+                    </h3>
+                    <p class="text-base text-purple-800 mb-4">Imperatives give orders or instructions. Use the base form of the verb (no subject needed):</p>
+                    
+                    <div class="grid md:grid-cols-2 gap-4 mb-4">
+                        <div class="bg-gray-100 border-l-4 border-emerald-600 p-4 rounded">
+                            <p class="font-bold text-purple-900 mb-2">✓ Affirmative Imperatives:</p>
+                            <ul class="space-y-1 text-purple-800">
+                                <li>• <strong>Open</strong> the door.</li>
+                                <li>• <strong>Sit</strong> down.</li>
+                                <li>• <strong>Read</strong> the book carefully.</li>
+                                <li>• <strong>Listen</strong> to me.</li>
+                            </ul>
+                        </div>
+                        <div class="bg-gray-100 border-l-4 border-rose-600 p-4 rounded">
+                            <p class="font-bold text-purple-900 mb-2">✗ Negative Imperatives (Don't + verb):</p>
+                            <ul class="space-y-1 text-purple-800">
+                                <li>• <strong>Don't open</strong> the door.</li>
+                                <li>• <strong>Don't sit</strong> there.</li>
+                                <li>• <strong>Don't run</strong> in the hallway.</li>
+                                <li>• <strong>Don't eat</strong> with your mouth full.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <p class="text-sm text-purple-700 italic">💡 <strong>Key Rule:</strong> Affirmative imperatives use the base verb (run, walk, eat). Negative imperatives use "Don't" + base verb (don't run, don't walk, don't eat).</p>
+                </div>
+            </div>
 
-  <!-- PRACTICE -->
-  <div class="subtab-panel" data-subtab-panel="practice" data-module="1">
-    <div id="quiz-m1" class="space-y-6"></div>
-  </div>
+            <!-- PRACTICE SECTION -->
+            <div class="mb-12">
+                <h2 class="text-3xl font-bold text-slate-800 mb-6 flex items-center gap-3">
+                    <i class="fas fa-pen-fancy text-indigo-600"></i> Practice Exercises: Module 1
+                </h2>
 
-</section>
+                <!-- Q1: Multiple Choice - Plural -->
+                <div class="question-card bg-white p-6 rounded-xl mb-6 shadow">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="bg-indigo-600 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm">1</span>
+                        <div class="flex-1">
+                            <h4 class="font-bold text-lg text-slate-800 mb-2">Choose the correct plural form:</h4>
+                            <p class="text-base text-slate-700 mb-4">The plural of "lady" is _____.</p>
+                            <div class="space-y-2 mb-4">
+                                <label class="flex items-center gap-3 cursor-pointer">
+                                    <input type="radio" name="q1" value="ladys" class="w-4 h-4"> <span>ladys</span>
+                                </label>
+                                <label class="flex items-center gap-3 cursor-pointer">
+                                    <input type="radio" name="q1" value="ladies" class="w-4 h-4"> <span>ladies</span>
+                                </label>
+                                <label class="flex items-center gap-3 cursor-pointer">
+                                    <input type="radio" name="q1" value="ladyes" class="w-4 h-4"> <span>ladyes</span>
+                                </label>
+                                <label class="flex items-center gap-3 cursor-pointer">
+                                    <input type="radio" name="q1" value="ladyies" class="w-4 h-4"> <span>ladyies</span>
+                                </label>
+                            </div>
+                            <button onclick="checkAnswer('q1', 'ladies', 'When a noun ends in consonant + y, change the y to i and add -es. lady → ladies')" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded transition duration-300">
+                                <i class="fas fa-check"></i> Check Answer
+                            </button>
+                            <div id="q1-feedback" class="mt-4 hidden"></div>
+                        </div>
+                    </div>
+                </div>
 
-<!-- ================================================================= -->
-<!-- MODULE 2 -->
-<!-- ================================================================= -->
-<section class="module-panel" data-module-panel="2">
+                <!-- Q2: Fill in the blank - Demonstrative -->
+                <div class="question-card bg-white p-6 rounded-xl mb-6 shadow">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="bg-indigo-600 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm">2</span>
+                        <div class="flex-1">
+                            <h4 class="font-bold text-lg text-slate-800 mb-2">Fill in the blank:</h4>
+                            <p class="text-base text-slate-700 mb-4">_____ books on the table are mine. (pointing to books far from you)</p>
+                            <input type="text" id="q2-input" class="w-full border-2 border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:border-indigo-600 mb-4" placeholder="Enter answer...">
+                            <button onclick="checkAnswer('q2', 'those', 'Those is used for plural nouns that are far from the speaker. This (singular, near), That (singular, far), These (plural, near), Those (plural, far).')" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded transition duration-300">
+                                <i class="fas fa-check"></i> Check Answer
+                            </button>
+                            <div id="q2-feedback" class="mt-4 hidden"></div>
+                        </div>
+                    </div>
+                </div>
 
-  <div class="mb-8">
-    <span class="text-xs font-bold uppercase tracking-widest text-indigo-500">Module 2 &middot; Unit 3</span>
-    <h2 class="font-display font-bold text-3xl text-indigo-950 mt-1">Present Continuous &amp; Present Simple</h2>
-    <p class="text-slate-500 mt-2 max-w-2xl">What's happening right now vs. what happens generally &mdash; and the verbs that break the rule.</p>
-  </div>
+                <!-- Q3: Multiple Choice - Irregular Plural -->
+                <div class="question-card bg-white p-6 rounded-xl mb-6 shadow">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="bg-indigo-600 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm">3</span>
+                        <div class="flex-1">
+                            <h4 class="font-bold text-lg text-slate-800 mb-2">Select the correct option:</h4>
+                            <p class="text-base text-slate-700 mb-4">Which sentence is correct?</p>
+                            <div class="space-y-2 mb-4">
+                                <label class="flex items-center gap-3 cursor-pointer">
+                                    <input type="radio" name="q3" value="a" class="w-4 h-4"> <span>There are five childs in the room.</span>
+                                </label>
+                                <label class="flex items-center gap-3 cursor-pointer">
+                                    <input type="radio" name="q3" value="b" class="w-4 h-4"> <span>There are five children in the room.</span>
+                                </label>
+                                <label class="flex items-center gap-3 cursor-pointer">
+                                    <input type="radio" name="q3" value="c" class="w-4 h-4"> <span>There are five childes in the room.</span>
+                                </label>
+                                <label class="flex items-center gap-3 cursor-pointer">
+                                    <input type="radio" name="q3" value="d" class="w-4 h-4"> <span>There are five childies in the room.</span>
+                                </label>
+                            </div>
+                            <button onclick="checkAnswer('q3', 'b', 'Child is an irregular noun. Its plural form is children, not childs. Other irregular plurals include man→men, person→people, tooth→teeth.')" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded transition duration-300">
+                                <i class="fas fa-check"></i> Check Answer
+                            </button>
+                            <div id="q3-feedback" class="mt-4 hidden"></div>
+                        </div>
+                    </div>
+                </div>
 
-  <div class="flex gap-6 border-b border-slate-200 mb-8">
-    <button class="subtab-btn active-subtab pb-3 border-b-2 border-transparent font-semibold text-slate-500 transition duration-300" data-subtab="learn" data-module="2">
-      <i class="fa-solid fa-book mr-2"></i>Learn &amp; Review
-    </button>
-    <button class="subtab-btn pb-3 border-b-2 border-transparent font-semibold text-slate-500 transition duration-300" data-subtab="practice" data-module="2">
-      <i class="fa-solid fa-pen-to-square mr-2"></i>Practice Exercises
-    </button>
-  </div>
+                <!-- Q4: Imperative - Affirmative/Negative -->
+                <div class="question-card bg-white p-6 rounded-xl mb-6 shadow">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="bg-indigo-600 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm">4</span>
+                        <div class="flex-1">
+                            <h4 class="font-bold text-lg text-slate-800 mb-2">Select the correct imperative:</h4>
+                            <p class="text-base text-slate-700 mb-4">Your teacher tells you a negative instruction. What would they say?</p>
+                            <select id="q4-select" class="w-full border-2 border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:border-indigo-600 mb-4">
+                                <option value="">-- Select an option --</option>
+                                <option value="a">Run quickly!</option>
+                                <option value="b">Don't run in the hallway!</option>
+                                <option value="c">Running in the hallway!</option>
+                                <option value="d">Not run in the hallway!</option>
+                            </select>
+                            <button onclick="checkAnswer('q4', 'b', 'Negative imperatives use the structure: Don\'t + base verb. The correct form is \"Don\'t run in the hallway!\" not \"Not run\" or \"Running.\"')" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded transition duration-300">
+                                <i class="fas fa-check"></i> Check Answer
+                            </button>
+                            <div id="q4-feedback" class="mt-4 hidden"></div>
+                        </div>
+                    </div>
+                </div>
 
-  <div class="subtab-panel active" data-subtab-panel="learn" data-module="2">
-
-    <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm mb-8">
-      <h3 class="font-display font-bold text-xl text-indigo-900 mb-3"><i class="fa-solid fa-bolt text-indigo-500 mr-2"></i>Present Continuous: Subject + be + V-ing</h3>
-      <div class="flex flex-wrap gap-3 mb-5">
-        <span class="bg-indigo-100 text-indigo-800 font-mono text-sm px-3 py-1.5 rounded-2xl">I am (I'm)</span>
-        <span class="bg-indigo-100 text-indigo-800 font-mono text-sm px-3 py-1.5 rounded-2xl">He/She/It is ('s)</span>
-        <span class="bg-indigo-100 text-indigo-800 font-mono text-sm px-3 py-1.5 rounded-2xl">We/You/They are ('re)</span>
-      </div>
-      <p class="text-sm text-slate-500 mb-3 font-semibold">V-ing spelling rules:</p>
-      <table class="w-full text-sm">
-        <thead><tr class="text-left text-slate-400 border-b border-slate-100"><th class="py-2">Rule</th><th>Example</th></tr></thead>
-        <tbody class="divide-y divide-slate-100">
-          <tr><td class="py-2">Drop silent <span class="font-mono text-indigo-600">-e</span></td><td>make &rarr; mak<b>ing</b></td></tr>
-          <tr><td class="py-2">1 syllable, CVC &rarr; double consonant</td><td>stop &rarr; stop<b>p</b>ing</td></tr>
-          <tr><td class="py-2"><span class="font-mono text-indigo-600">-ie</span> &rarr; <span class="font-mono text-indigo-600">y</span></td><td>lie &rarr; l<b>y</b>ing</td></tr>
-          <tr><td class="py-2">otherwise: just add <span class="font-mono text-indigo-600">-ing</span></td><td>read &rarr; read<b>ing</b></td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm mb-8">
-      <h3 class="font-display font-bold text-xl text-indigo-900 mb-3"><i class="fa-solid fa-code-compare text-indigo-500 mr-2"></i>Present Simple vs. Present Continuous</h3>
-      <div class="grid sm:grid-cols-2 gap-4">
-        <div class="rounded-2xl border border-slate-200 p-4">
-          <p class="font-semibold text-slate-700 mb-2"><i class="fa-regular fa-calendar text-indigo-400 mr-2"></i>Present Simple</p>
-          <p class="text-sm text-slate-500 mb-2">Habits, routines, facts.</p>
-          <p class="text-xs text-slate-400 mb-2">Time words: always, usually, every day, on Mondays</p>
-          <p class="font-mono text-sm text-indigo-700">She walks to school every day.</p>
+                <!-- Q5: Fill in blank - F/FE to VES -->
+                <div class="question-card bg-white p-6 rounded-xl mb-6 shadow">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="bg-indigo-600 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm">5</span>
+                        <div class="flex-1">
+                            <h4 class="font-bold text-lg text-slate-800 mb-2">Fill in the blank:</h4>
+                            <p class="text-base text-slate-700 mb-4">She has two _____ in her hand. (plural of knife)</p>
+                            <input type="text" id="q5-input" class="w-full border-2 border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:border-indigo-600 mb-4" placeholder="Enter answer...">
+                            <button onclick="checkAnswer('q5', 'knives', 'When a noun ends in f or fe, change it to v and add -es. knife → knives, wife → wives, leaf → leaves. This rule applies to most but not all f/fe words.')" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded transition duration-300">
+                                <i class="fas fa-check"></i> Check Answer
+                            </button>
+                            <div id="q5-feedback" class="mt-4 hidden"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="rounded-2xl border border-slate-200 p-4">
-          <p class="font-semibold text-slate-700 mb-2"><i class="fa-solid fa-video text-indigo-400 mr-2"></i>Present Continuous</p>
-          <p class="text-sm text-slate-500 mb-2">Actions happening right now.</p>
-          <p class="text-xs text-slate-400 mb-2">Time words: now, right now, at the moment, look!</p>
-          <p class="font-mono text-sm text-indigo-700">She is walking to school right now.</p>
+
+        <!-- MODULE 2: PRESENT TENSES -->
+        <div id="module2" class="module-content hidden">
+            <!-- LEARN SECTION -->
+            <div class="mb-12">
+                <h2 class="text-3xl font-bold text-slate-800 mb-6 flex items-center gap-3">
+                    <i class="fas fa-lightbulb text-yellow-500"></i> Learn & Review: Module 2
+                </h2>
+                
+                <!-- PRESENT CONTINUOUS -->
+                <div class="bg-cyan-50 border-l-4 border-cyan-500 p-6 rounded-lg mb-6">
+                    <h3 class="text-2xl font-bold text-cyan-900 mb-4">
+                        <i class="fas fa-person-running"></i> 1. Present Continuous (am/is/are + -ing)
+                    </h3>
+                    <p class="text-base text-cyan-800 mb-4"><strong>Use:</strong> For actions happening right now, at this moment.</p>
+                    
+                    <p class="font-bold text-cyan-900 mb-3">Structure: Subject + <strong>be</strong> (am/is/are) + <strong>V-ing</strong></p>
+                    
+                    <div class="grid md:grid-cols-2 gap-4 mb-4">
+                        <div class="bg-gray-100 border-l-4 border-cyan-600 p-4 rounded">
+                            <p class="font-bold text-cyan-900 mb-2">Examples:</p>
+                            <ul class="space-y-1 text-cyan-800">
+                                <li>• I <strong>am reading</strong> a book.</li>
+                                <li>• She <strong>is watching</strong> TV.</li>
+                                <li>• They <strong>are playing</strong> football.</li>
+                                <li>• The baby <strong>is sleeping</strong> now.</li>
+                            </ul>
+                        </div>
+                        <div class="bg-gray-100 border-l-4 border-cyan-600 p-4 rounded">
+                            <p class="font-bold text-cyan-900 mb-2">Time Expressions:</p>
+                            <ul class="space-y-1 text-cyan-800">
+                                <li>• now</li>
+                                <li>• right now</li>
+                                <li>• at this moment</li>
+                                <li>• at the moment</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <p class="font-bold text-cyan-900 mb-3 mt-4">V-ing Spelling Rules:</p>
+                    <div class="overflow-x-auto">
+                        <table class="w-full border-collapse">
+                            <thead>
+                                <tr class="bg-cyan-200">
+                                    <th class="border border-cyan-300 px-4 py-2 text-left font-bold">Rule</th>
+                                    <th class="border border-cyan-300 px-4 py-2 text-left font-bold">Example</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="border border-cyan-300 px-4 py-2"><strong>Just add -ing</strong></td>
+                                    <td class="border border-cyan-300 px-4 py-2">work → working, talk → talking, read → reading</td>
+                                </tr>
+                                <tr class="bg-cyan-100">
+                                    <td class="border border-cyan-300 px-4 py-2"><strong>Drop silent 'e', add -ing</strong></td>
+                                    <td class="border border-cyan-300 px-4 py-2">make → making, write → writing, take → taking</td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-cyan-300 px-4 py-2"><strong>Double final consonant, add -ing</strong></td>
+                                    <td class="border border-cyan-300 px-4 py-2">swim → swimming, run → running, sit → sitting</td>
+                                </tr>
+                                <tr class="bg-cyan-100">
+                                    <td class="border border-cyan-300 px-4 py-2"><strong>ie → y, add -ing</strong></td>
+                                    <td class="border border-cyan-300 px-4 py-2">lie → lying, die → dying, tie → tying</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- PRESENT SIMPLE vs CONTINUOUS -->
+                <div class="bg-amber-50 border-l-4 border-amber-500 p-6 rounded-lg mb-6">
+                    <h3 class="text-2xl font-bold text-amber-900 mb-4">
+                        <i class="fas fa-clock"></i> 2. Present Simple vs. Present Continuous
+                    </h3>
+                    <p class="text-base text-amber-800 mb-4">Choose the right tense based on whether the action is happening <strong>now</strong> or is a <strong>habit/general fact</strong>:</p>
+                    
+                    <div class="overflow-x-auto mb-4">
+                        <table class="w-full border-collapse">
+                            <thead>
+                                <tr class="bg-amber-200">
+                                    <th class="border border-amber-300 px-4 py-2 text-left font-bold">Present Simple</th>
+                                    <th class="border border-amber-300 px-4 py-2 text-left font-bold">Present Continuous</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="border border-amber-300 px-4 py-2">Habits & routines</td>
+                                    <td class="border border-amber-300 px-4 py-2">Actions happening now</td>
+                                </tr>
+                                <tr class="bg-amber-100">
+                                    <td class="border border-amber-300 px-4 py-2">General facts</td>
+                                    <td class="border border-amber-300 px-4 py-2">Temporary situations</td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-amber-300 px-4 py-2">Permanent situations</td>
+                                    <td class="border border-amber-300 px-4 py-2">Planned future events</td>
+                                </tr>
+                                <tr class="bg-amber-100">
+                                    <td class="border border-amber-300 px-4 py-2"><strong>I play tennis.</strong></td>
+                                    <td class="border border-amber-300 px-4 py-2"><strong>I am playing tennis.</strong></td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-amber-300 px-4 py-2"><strong>She works here.</strong></td>
+                                    <td class="border border-amber-300 px-4 py-2"><strong>She is working now.</strong></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- STATIVE VERBS -->
+                <div class="bg-red-50 border-l-4 border-red-500 p-6 rounded-lg">
+                    <h3 class="text-2xl font-bold text-red-900 mb-4">
+                        <i class="fas fa-exclamation-circle"></i> 3. Critical: Stative Verbs (No -ing!)
+                    </h3>
+                    <p class="text-base text-red-800 mb-4">Some verbs describe <strong>states</strong> (conditions) rather than <strong>actions</strong>. These verbs <strong>CANNOT be used with -ing</strong>:</p>
+                    
+                    <div class="bg-red-100 p-4 rounded mb-4 border-2 border-red-400">
+                        <p class="font-bold text-red-900 mb-3">Common Stative Verbs:</p>
+                        <p class="text-red-800 mb-2"><span class="bg-yellow-200 font-bold px-2 py-1 rounded">like, love, hate, want, need, know, understand, remember, forget, believe, think, have, be, seem, appear, look</span> (+ adjective), sound, taste, smell, own, possess</p>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="bg-gray-100 border-l-4 border-rose-600 p-4 rounded">
+                            <p class="font-bold text-red-900 mb-2">✗ WRONG (with -ing):</p>
+                            <ul class="space-y-1 text-red-700">
+                                <li>• I am liking this song.</li>
+                                <li>• She is wanting coffee.</li>
+                                <li>• They are knowing the answer.</li>
+                                <li>• He is owning a car.</li>
+                            </ul>
+                        </div>
+                        <div class="bg-gray-100 border-l-4 border-emerald-600 p-4 rounded">
+                            <p class="font-bold text-red-900 mb-2">✓ CORRECT (without -ing):</p>
+                            <ul class="space-y-1 text-emerald-700">
+                                <li>• I <strong>like</strong> this song.</li>
+                                <li>• She <strong>wants</strong> coffee.</li>
+                                <li>• They <strong>know</strong> the answer.</li>
+                                <li>• He <strong>owns</strong> a car.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <p class="text-sm text-red-700 italic mt-4">💡 <strong>Remember:</strong> Use Present Simple (not Continuous) with stative verbs, even when talking about "right now."</p>
+                </div>
+            </div>
+
+            <!-- PRACTICE SECTION -->
+            <div class="mb-12">
+                <h2 class="text-3xl font-bold text-slate-800 mb-6 flex items-center gap-3">
+                    <i class="fas fa-pen-fancy text-indigo-600"></i> Practice Exercises: Module 2
+                </h2>
+
+                <!-- Q6: Multiple Choice - V-ing spelling -->
+                <div class="question-card bg-white p-6 rounded-xl mb-6 shadow">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="bg-indigo-600 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm">1</span>
+                        <div class="flex-1">
+                            <h4 class="font-bold text-lg text-slate-800 mb-2">Choose the correct present continuous form:</h4>
+                            <p class="text-base text-slate-700 mb-4">Which sentence uses the correct V-ing form?</p>
+                            <div class="space-y-2 mb-4">
+                                <label class="flex items-center gap-3 cursor-pointer">
+                                    <input type="radio" name="q6" value="a" class="w-4 h-4"> <span>They are swiming in the pool.</span>
+                                </label>
+                                <label class="flex items-center gap-3 cursor-pointer">
+                                    <input type="radio" name="q6" value="b" class="w-4 h-4"> <span>They are swimming in the pool.</span>
+                                </label>
+                                <label class="flex items-center gap-3 cursor-pointer">
+                                    <input type="radio" name="q6" value="c" class="w-4 h-4"> <span>They are swiming in the pool.</span>
+                                </label>
+                                <label class="flex items-center gap-3 cursor-pointer">
+                                    <input type="radio" name="q6" value="d" class="w-4 h-4"> <span>They are swimining in the pool.</span>
+                                </label>
+                            </div>
+                            <button onclick="checkAnswer('q6', 'b', 'The verb \"swim\" ends with a short vowel + consonant (i+m). When adding -ing, you must double the final consonant: swim → swimming. This applies to one-syllable verbs with short vowels (sit → sitting, run → running, swim → swimming).')" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded transition duration-300">
+                                <i class="fas fa-check"></i> Check Answer
+                            </button>
+                            <div id="q6-feedback" class="mt-4 hidden"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Q7: Fill in blank - Present Simple vs Continuous -->
+                <div class="question-card bg-white p-6 rounded-xl mb-6 shadow">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="bg-indigo-600 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm">2</span>
+                        <div class="flex-1">
+                            <h4 class="font-bold text-lg text-slate-800 mb-2">Fill in the blank:</h4>
+                            <p class="text-base text-slate-700 mb-4">She _____ (work) in an office every day.</p>
+                            <input type="text" id="q7-input" class="w-full border-2 border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:border-indigo-600 mb-4" placeholder="Enter answer...">
+                            <button onclick="checkAnswer('q7', 'works', 'The time expression \"every day\" indicates a routine/habit. Use Present Simple (works), not Present Continuous. Present Simple form for \"she\" is \"works\" (base verb + -s for third person singular).')" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded transition duration-300">
+                                <i class="fas fa-check"></i> Check Answer
+                            </button>
+                            <div id="q7-feedback" class="mt-4 hidden"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Q8: Stative Verb Detection -->
+                <div class="question-card bg-white p-6 rounded-xl mb-6 shadow">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="bg-indigo-600 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm">3</span>
+                        <div class="flex-1">
+                            <h4 class="font-bold text-lg text-slate-800 mb-2">Which sentence is INCORRECT?</h4>
+                            <p class="text-base text-slate-700 mb-4">Find the sentence with the error:</p>
+                            <div class="space-y-2 mb-4">
+                                <label class="flex items-center gap-3 cursor-pointer">
+                                    <input type="radio" name="q8" value="a" class="w-4 h-4"> <span>I am loving this chocolate.</span>
+                                </label>
+                                <label class="flex items-center gap-3 cursor-pointer">
+                                    <input type="radio" name="q8" value="b" class="w-4 h-4"> <span>I love this chocolate.</span>
+                                </label>
+                                <label class="flex items-center gap-3 cursor-pointer">
+                                    <input type="radio" name="q8" value="c" class="w-4 h-4"> <span>She is eating chocolate now.</span>
+                                </label>
+                                <label class="flex items-center gap-3 cursor-pointer">
+                                    <input type="radio" name="q8" value="d" class="w-4 h-4"> <span>They are sitting on the couch.</span>
+                                </label>
+                            </div>
+                            <button onclick="checkAnswer('q8', 'a', '\"Love\" is a stative verb (expressing a feeling/state). Stative verbs cannot take the -ing form. The correct sentence is \"I love this chocolate.\" (Present Simple). The other sentences use action verbs which can take -ing (eating, sitting) correctly.')" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded transition duration-300">
+                                <i class="fas fa-check"></i> Check Answer
+                            </button>
+                            <div id="q8-feedback" class="mt-4 hidden"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Q9: Fill blank - Silent E rule -->
+                <div class="question-card bg-white p-6 rounded-xl mb-6 shadow">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="bg-indigo-600 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm">4</span>
+                        <div class="flex-1">
+                            <h4 class="font-bold text-lg text-slate-800 mb-2">Fill in the blank:</h4>
+                            <p class="text-base text-slate-700 mb-4">He is _____ (write) an email right now.</p>
+                            <input type="text" id="q9-input" class="w-full border-2 border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:border-indigo-600 mb-4" placeholder="Enter answer...">
+                            <button onclick="checkAnswer('q9', 'writing', 'The verb \"write\" ends with a silent \"e\". When adding -ing, drop the silent e: write → writing. Other examples: make → making, take → taking, care → caring.')" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded transition duration-300">
+                                <i class="fas fa-check"></i> Check Answer
+                            </button>
+                            <div id="q9-feedback" class="mt-4 hidden"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Q10: Present Continuous time expression -->
+                <div class="question-card bg-white p-6 rounded-xl mb-6 shadow">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="bg-indigo-600 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm">5</span>
+                        <div class="flex-1">
+                            <h4 class="font-bold text-lg text-slate-800 mb-2">Select the correct option:</h4>
+                            <p class="text-base text-slate-700 mb-4">Which sentence correctly uses the Present Continuous?</p>
+                            <select id="q10-select" class="w-full border-2 border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:border-indigo-600 mb-4">
+                                <option value="">-- Select an option --</option>
+                                <option value="a">She is studying every day.</option>
+                                <option value="b">She is studying at the moment.</option>
+                                <option value="c">She is studying usually.</option>
+                                <option value="d">She is studying always.</option>
+                            </select>
+                            <button onclick="checkAnswer('q10', 'b', 'Present Continuous is used for actions happening right now. Time expressions for Present Continuous include: now, right now, at the moment, at this moment. Expressions like \"every day,\" \"usually,\" and \"always\" are used with Present Simple, not Continuous.')" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded transition duration-300">
+                                <i class="fas fa-check"></i> Check Answer
+                            </button>
+                            <div id="q10-feedback" class="mt-4 hidden"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
 
-    <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
-      <h3 class="font-display font-bold text-xl text-indigo-900 mb-3"><i class="fa-solid fa-hand text-indigo-500 mr-2"></i>Stative Verbs &mdash; No -ing Allowed</h3>
-      <p class="text-sm text-slate-500 mb-4">Verbs describing states, feelings, or thoughts (like, want, know, need, love, believe, understand, own) are almost never used in the continuous form.</p>
-      <div class="grid sm:grid-cols-2 gap-4">
-        <div class="rounded-2xl border border-rose-200 bg-rose-50 p-4">
-          <p class="text-xs font-bold uppercase text-rose-600 mb-2"><i class="fa-solid fa-xmark mr-1"></i>Incorrect</p>
-          <p class="font-mono text-sm text-rose-900 line-through">I am wanting some coffee.</p>
-          <p class="font-mono text-sm text-rose-900 line-through">She is knowing the answer.</p>
+        <!-- MODULE 3: COMPARATIVES & SUPERLATIVES -->
+        <div id="module3" class="module-content hidden">
+            <!-- LEARN SECTION -->
+            <div class="mb-12">
+                <h2 class="text-3xl font-bold text-slate-800 mb-6 flex items-center gap-3">
+                    <i class="fas fa-lightbulb text-yellow-500"></i> Learn & Review: Module 3
+                </h2>
+
+                <!-- COMPARATIVE ADJECTIVES -->
+                <div class="bg-orange-50 border-l-4 border-orange-500 p-6 rounded-lg mb-6">
+                    <h3 class="text-2xl font-bold text-orange-900 mb-4">
+                        <i class="fas fa-not-equal"></i> 1. Comparative Adjectives (+ than)
+                    </h3>
+                    <p class="text-base text-orange-800 mb-4"><strong>Use:</strong> To compare two people, things, or groups. Structure: <strong>Adjective + -er + than</strong> OR <strong>more + Adjective + than</strong></p>
+                    
+                    <p class="font-bold text-orange-900 mb-3">Spelling Rules for One-Syllable Adjectives:</p>
+                    <div class="overflow-x-auto mb-4">
+                        <table class="w-full border-collapse">
+                            <thead>
+                                <tr class="bg-orange-200">
+                                    <th class="border border-orange-300 px-4 py-2 text-left font-bold">Rule</th>
+                                    <th class="border border-orange-300 px-4 py-2 text-left font-bold">Example</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="border border-orange-300 px-4 py-2"><strong>Most: add -er</strong></td>
+                                    <td class="border border-orange-300 px-4 py-2">tall → taller, short → shorter, warm → warmer</td>
+                                </tr>
+                                <tr class="bg-orange-100">
+                                    <td class="border border-orange-300 px-4 py-2"><strong>End in 'e': add -r</strong></td>
+                                    <td class="border border-orange-300 px-4 py-2">large → larger, nice → nicer, brave → braver</td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-orange-300 px-4 py-2"><strong>End in consonant+y: change y → i, add -er</strong></td>
+                                    <td class="border border-orange-300 px-4 py-2">happy → happier, easy → easier, busy → busier</td>
+                                </tr>
+                                <tr class="bg-orange-100">
+                                    <td class="border border-orange-300 px-4 py-2"><strong>Vowel+consonant: double consonant, add -er</strong></td>
+                                    <td class="border border-orange-300 px-4 py-2">big → bigger, fat → fatter, hot → hotter</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <p class="font-bold text-orange-900 mb-3">Multi-Syllable Adjectives: Use "more"</p>
+                    <div class="bg-gray-100 border-l-4 border-orange-600 p-4 rounded mb-4">
+                        <ul class="space-y-1 text-orange-800">
+                            <li>• beautiful → <strong>more beautiful</strong></li>
+                            <li>• interesting → <strong>more interesting</strong></li>
+                            <li>• expensive → <strong>more expensive</strong></li>
+                            <li>• comfortable → <strong>more comfortable</strong></li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-gray-100 border-l-4 border-orange-600 p-4 rounded">
+                        <p class="font-bold text-orange-900 mb-2">Examples with "than":</p>
+                        <ul class="space-y-1 text-orange-800">
+                            <li>• This car is <strong>faster than</strong> that one.</li>
+                            <li>• She is <strong>more intelligent than</strong> her brother.</li>
+                            <li>• Coffee is <strong>hotter than</strong> juice.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- SUPERLATIVE ADJECTIVES -->
+                <div class="bg-lime-50 border-l-4 border-lime-500 p-6 rounded-lg mb-6">
+                    <h3 class="text-2xl font-bold text-lime-900 mb-4">
+                        <i class="fas fa-crown"></i> 2. Superlative Adjectives (the + -est/most)
+                    </h3>
+                    <p class="text-base text-lime-800 mb-4"><strong>Use:</strong> To indicate the extreme quality of three or more items. Structure: <strong>the + Adjective + -est</strong> OR <strong>the + most + Adjective</strong></p>
+                    
+                    <p class="font-bold text-lime-900 mb-3">One-Syllable Adjectives:</p>
+                    <div class="overflow-x-auto mb-4">
+                        <table class="w-full border-collapse">
+                            <thead>
+                                <tr class="bg-lime-200">
+                                    <th class="border border-lime-300 px-4 py-2 text-left font-bold">Rule</th>
+                                    <th class="border border-lime-300 px-4 py-2 text-left font-bold">Example</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="border border-lime-300 px-4 py-2"><strong>Most: add -est</strong></td>
+                                    <td class="border border-lime-300 px-4 py-2">tall → the tallest, short → the shortest, cold → the coldest</td>
+                                </tr>
+                                <tr class="bg-lime-100">
+                                    <td class="border border-lime-300 px-4 py-2"><strong>End in 'e': add -st</strong></td>
+                                    <td class="border border-lime-300 px-4 py-2">large → the largest, nice → the nicest, brave → the bravest</td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-lime-300 px-4 py-2"><strong>End in consonant+y: change y → i, add -est</strong></td>
+                                    <td class="border border-lime-300 px-4 py-2">happy → the happiest, easy → the easiest, pretty → the prettiest</td>
+                                </tr>
+                                <tr class="bg-lime-100">
+                                    <td class="border border-lime-300 px-4 py-2"><strong>Vowel+consonant: double consonant, add -est</strong></td>
+                                    <td class="border border-lime-300 px-4 py-2">big → the biggest, hot → the hottest, wet → the wettest</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <p class="font-bold text-lime-900 mb-3">Multi-Syllable Adjectives: Use "most"</p>
+                    <div class="bg-gray-100 border-l-4 border-lime-600 p-4 rounded mb-4">
+                        <ul class="space-y-1 text-lime-800">
+                            <li>• beautiful → <strong>the most beautiful</strong></li>
+                            <li>• interesting → <strong>the most interesting</strong></li>
+                            <li>• expensive → <strong>the most expensive</strong></li>
+                            <li>• comfortable → <strong>the most comfortable</strong></li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-gray-100 border-l-4 border-lime-600 p-4 rounded">
+                        <p class="font-bold text-lime-900 mb-2">Examples:</p>
+                        <ul class="space-y-1 text-lime-800">
+                            <li>• This is <strong>the fastest</strong> car I've ever seen.</li>
+                            <li>• She is <strong>the most intelligent</strong> student in the class.</li>
+                            <li>• That mountain is <strong>the highest</strong> in the region.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- IRREGULAR ADJECTIVES -->
+                <div class="bg-pink-50 border-l-4 border-pink-500 p-6 rounded-lg">
+                    <h3 class="text-2xl font-bold text-pink-900 mb-4">
+                        <i class="fas fa-triangle-exclamation"></i> 3. Irregular Comparative & Superlative Forms
+                    </h3>
+                    <p class="text-base text-pink-800 mb-4">Some adjectives have irregular forms that don't follow the standard rules:</p>
+                    
+                    <div class="overflow-x-auto">
+                        <table class="w-full border-collapse">
+                            <thead>
+                                <tr class="bg-pink-200">
+                                    <th class="border border-pink-300 px-4 py-2 text-left font-bold">Base</th>
+                                    <th class="border border-pink-300 px-4 py-2 text-left font-bold">Comparative</th>
+                                    <th class="border border-pink-300 px-4 py-2 text-left font-bold">Superlative</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="border border-pink-300 px-4 py-2"><strong>good</strong></td>
+                                    <td class="border border-pink-300 px-4 py-2"><strong>better</strong></td>
+                                    <td class="border border-pink-300 px-4 py-2"><strong>the best</strong></td>
+                                </tr>
+                                <tr class="bg-pink-100">
+                                    <td class="border border-pink-300 px-4 py-2"><strong>bad</strong></td>
+                                    <td class="border border-pink-300 px-4 py-2"><strong>worse</strong></td>
+                                    <td class="border border-pink-300 px-4 py-2"><strong>the worst</strong></td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-pink-300 px-4 py-2"><strong>far</strong></td>
+                                    <td class="border border-pink-300 px-4 py-2"><strong>further / farther</strong></td>
+                                    <td class="border border-pink-300 px-4 py-2"><strong>the furthest / the farthest</strong></td>
+                                </tr>
+                                <tr class="bg-pink-100">
+                                    <td class="border border-pink-300 px-4 py-2"><strong>little</strong></td>
+                                    <td class="border border-pink-300 px-4 py-2"><strong>less</strong></td>
+                                    <td class="border border-pink-300 px-4 py-2"><strong>the least</strong></td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-pink-300 px-4 py-2"><strong>much / many</strong></td>
+                                    <td class="border border-pink-300 px-4 py-2"><strong>more</strong></td>
+                                    <td class="border border-pink-300 px-4 py-2"><strong>the most</strong></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="bg-gray-100 border-l-4 border-pink-600 p-4 rounded mt-4">
+                        <p class="font-bold text-pink-900 mb-2">Examples:</p>
+                        <ul class="space-y-1 text-pink-800">
+                            <li>• This pizza is <strong>better than</strong> that one. (not "gooder")</li>
+                            <li>• His score was <strong>worse than</strong> mine. (not "bader")</li>
+                            <li>• This is <strong>the best</strong> movie I've ever watched.</li>
+                            <li>• That was <strong>the worst</strong> experience of my life.</li>
+                            <li>• The city is <strong>farther</strong> than I thought.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PRACTICE SECTION -->
+            <div class="mb-12">
+                <h2 class="text-3xl font-bold text-slate-800 mb-6 flex items-center gap-3">
+                    <i class="fas fa-pen-fancy text-indigo-600"></i> Practice Exercises: Module 3
+                </h2>
+
+                <!-- Q11: Comparative form -->
+                <div class="question-card bg-white p-6 rounded-xl mb-6 shadow">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="bg-indigo-600 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm">1</span>
+                        <div class="flex-1">
+                            <h4 class="font-bold text-lg text-slate-800 mb-2">Fill in the blank:</h4>
+                            <p class="text-base text-slate-700 mb-4">A cat is _____ (fast) than a turtle.</p>
+                            <input type="text" id="q11-input" class="w-full border-2 border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:border-indigo-600 mb-4" placeholder="Enter answer...">
+                            <button onclick="checkAnswer('q11', 'faster', 'The adjective \"fast\" is one syllable. To form the comparative, add -er: fast → faster. Use this form when comparing two things. The complete sentence is \"A cat is faster than a turtle.\"')" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded transition duration-300">
+                                <i class="fas fa-check"></i> Check Answer
+                            </button>
+                            <div id="q11-feedback" class="mt-4 hidden"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Q12: Superlative form -->
+                <div class="question-card bg-white p-6 rounded-xl mb-6 shadow">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="bg-indigo-600 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm">2</span>
+                        <div class="flex-1">
+                            <h4 class="font-bold text-lg text-slate-800 mb-2">Choose the correct option:</h4>
+                            <p class="text-base text-slate-700 mb-4">Which sentence is correct?</p>
+                            <div class="space-y-2 mb-4">
+                                <label class="flex items-center gap-3 cursor-pointer">
+                                    <input type="radio" name="q12" value="a" class="w-4 h-4"> <span>That is the most beautiful flower.</span>
+                                </label>
+                                <label class="flex items-center gap-3 cursor-pointer">
+                                    <input type="radio" name="q12" value="b" class="w-4 h-4"> <span>That is the beautifulest flower.</span>
+                                </label>
+                                <label class="flex items-center gap-3 cursor-pointer">
+                                    <input type="radio" name="q12" value="c" class="w-4 h-4"> <span>That is the more beautiful flower.</span>
+                                </label>
+                                <label class="flex items-center gap-3 cursor-pointer">
+                                    <input type="radio" name="q12" value="d" class="w-4 h-4"> <span>That is the beautiful-est flower.</span>
+                                </label>
+                            </div>
+                            <button onclick="checkAnswer('q12', 'a', '\"Beautiful\" is a multi-syllable adjective, so use \"the most\" for the superlative form. The correct form is \"the most beautiful,\" NOT \"beautifulest.\" Only one-syllable adjectives typically add -est directly.')" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded transition duration-300">
+                                <i class="fas fa-check"></i> Check Answer
+                            </button>
+                            <div id="q12-feedback" class="mt-4 hidden"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Q13: Irregular form (good/bad) -->
+                <div class="question-card bg-white p-6 rounded-xl mb-6 shadow">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="bg-indigo-600 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm">3</span>
+                        <div class="flex-1">
+                            <h4 class="font-bold text-lg text-slate-800 mb-2">Select the correct form:</h4>
+                            <p class="text-base text-slate-700 mb-4">Her cooking is _____ (good) than mine.</p>
+                            <select id="q13-select" class="w-full border-2 border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:border-indigo-600 mb-4">
+                                <option value="">-- Select an option --</option>
+                                <option value="a">more good</option>
+                                <option value="b">gooder</option>
+                                <option value="c">better</option>
+                                <option value="d">more goodly</option>
+                            </select>
+                            <button onclick="checkAnswer('q13', 'c', '\"Good\" is an irregular adjective. The comparative form is \"better\" (not \"gooder\" or \"more good\"). The superlative form is \"the best.\" Other irregular adjectives: bad → worse → the worst, far → farther/further → the farthest/furthest.')" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded transition duration-300">
+                                <i class="fas fa-check"></i> Check Answer
+                            </button>
+                            <div id="q13-feedback" class="mt-4 hidden"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Q14: Consonant + Y rule -->
+                <div class="question-card bg-white p-6 rounded-xl mb-6 shadow">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="bg-indigo-600 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm">4</span>
+                        <div class="flex-1">
+                            <h4 class="font-bold text-lg text-slate-800 mb-2">Fill in the blank:</h4>
+                            <p class="text-base text-slate-700 mb-4">This test is _____ (easy) than the last one.</p>
+                            <input type="text" id="q14-input" class="w-full border-2 border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:border-indigo-600 mb-4" placeholder="Enter answer...">
+                            <button onclick="checkAnswer('q14', 'easier', 'The adjective \"easy\" ends in consonant + y. To form the comparative, change y to i and add -er: easy → easier. Apply the same rule for superlative: easy → the easiest. Other examples: happy → happier, busy → busier.')" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded transition duration-300">
+                                <i class="fas fa-check"></i> Check Answer
+                            </button>
+                            <div id="q14-feedback" class="mt-4 hidden"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Q15: Vowel + Consonant doubling rule -->
+                <div class="question-card bg-white p-6 rounded-xl mb-6 shadow">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="bg-indigo-600 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm">5</span>
+                        <div class="flex-1">
+                            <h4 class="font-bold text-lg text-slate-800 mb-2">Choose the correct form:</h4>
+                            <p class="text-base text-slate-700 mb-4">Which sentence uses the correct superlative?</p>
+                            <div class="space-y-2 mb-4">
+                                <label class="flex items-center gap-3 cursor-pointer">
+                                    <input type="radio" name="q15" value="a" class="w-4 h-4"> <span>Today is the hotest day of the year.</span>
+                                </label>
+                                <label class="flex items-center gap-3 cursor-pointer">
+                                    <input type="radio" name="q15" value="b" class="w-4 h-4"> <span>Today is the hottest day of the year.</span>
+                                </label>
+                                <label class="flex items-center gap-3 cursor-pointer">
+                                    <input type="radio" name="q15" value="c" class="w-4 h-4"> <span>Today is the hotter day of the year.</span>
+                                </label>
+                                <label class="flex items-center gap-3 cursor-pointer">
+                                    <input type="radio" name="q15" value="d" class="w-4 h-4"> <span>Today is the hotestest day of the year.</span>
+                                </label>
+                            </div>
+                            <button onclick="checkAnswer('q15', 'b', '\"Hot\" ends with a vowel + consonant (o + t). When adding -est to form the superlative, double the final consonant: hot → hottest. The same rule applies to comparative: hot → hotter. Other examples: big → the biggest, fat → the fattest, wet → the wettest.')" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded transition duration-300">
+                                <i class="fas fa-check"></i> Check Answer
+                            </button>
+                            <div id="q15-feedback" class="mt-4 hidden"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="rounded-2xl border border-emerald-200 bg-emerald-50 p-4">
-          <p class="text-xs font-bold uppercase text-emerald-600 mb-2"><i class="fa-solid fa-check mr-1"></i>Correct</p>
-          <p class="font-mono text-sm text-emerald-900">I want some coffee.</p>
-          <p class="font-mono text-sm text-emerald-900">She knows the answer.</p>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-800 text-white text-center py-8 mt-16">
+        <p class="text-sm">© 2026 Interactive English Grammar Masterclass | EN21101 English 1 | Master English Grammar with Confidence</p>
+    </footer>
+
+    <!-- RESULT MODAL -->
+    <div id="result-modal" class="fixed inset-0 bg-black bg-opacity-70 hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full p-8 modal-content">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold text-slate-800 mb-4">Quiz Complete! 🎉</h2>
+                
+                <div id="grade-display" class="mb-8"></div>
+                
+                <div class="grid grid-cols-3 gap-4 mb-8">
+                    <div class="bg-indigo-50 rounded-lg p-4">
+                        <p class="text-sm text-gray-600 mb-1">Total Score</p>
+                        <p class="text-2xl font-bold text-indigo-600" id="final-score">0/15</p>
+                    </div>
+                    <div class="bg-emerald-50 rounded-lg p-4">
+                        <p class="text-sm text-gray-600 mb-1">Percentage</p>
+                        <p class="text-2xl font-bold text-emerald-600" id="final-percentage">0%</p>
+                    </div>
+                    <div class="bg-orange-50 rounded-lg p-4">
+                        <p class="text-sm text-gray-600 mb-1">Grade</p>
+                        <p class="text-2xl font-bold text-orange-600" id="final-grade">N/A</p>
+                    </div>
+                </div>
+
+                <div id="module-breakdown" class="mb-8 text-left bg-gray-50 p-6 rounded-lg"></div>
+
+                <div id="feedback-message" class="text-lg font-semibold mb-8 text-slate-700 italic"></div>
+
+                <div class="space-y-3">
+                    <button onclick="resetQuiz()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300">
+                        <i class="fas fa-redo"></i> Reset Quiz
+                    </button>
+                    <button onclick="closeModal()" class="w-full bg-gray-300 hover:bg-gray-400 text-slate-800 font-bold py-3 px-6 rounded-lg transition duration-300">
+                        <i class="fas fa-times"></i> Close
+                    </button>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
 
-  </div>
+    <script>
+        // STATE MANAGEMENT
+        const quizState = {
+            answers: {},
+            checked: {},
+            scores: {
+                module1: 0,
+                module2: 0,
+                module3: 0
+            },
+            currentModule: 'module1'
+        };
 
-  <div class="subtab-panel" data-subtab-panel="practice" data-module="2">
-    <div id="quiz-m2" class="space-y-6"></div>
-  </div>
+        // QUESTION DATA
+        const questions = {
+            q1: { module: 'module1', total: 5 },
+            q2: { module: 'module1', total: 5 },
+            q3: { module: 'module1', total: 5 },
+            q4: { module: 'module1', total: 5 },
+            q5: { module: 'module1', total: 5 },
+            q6: { module: 'module2', total: 5 },
+            q7: { module: 'module2', total: 5 },
+            q8: { module: 'module2', total: 5 },
+            q9: { module: 'module2', total: 5 },
+            q10: { module: 'module2', total: 5 },
+            q11: { module: 'module3', total: 5 },
+            q12: { module: 'module3', total: 5 },
+            q13: { module: 'module3', total: 5 },
+            q14: { module: 'module3', total: 5 },
+            q15: { module: 'module3', total: 5 }
+        };
 
-</section>
+        // SWITCH MODULES
+        function switchModule(moduleId) {
+            document.querySelectorAll('.module-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.module-tab').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById(moduleId).classList.remove('hidden');
+            event.target.closest('.module-tab').classList.add('active');
+            
+            quizState.currentModule = moduleId;
+            updateScoreboard();
+        }
 
-<!-- ================================================================= -->
-<!-- MODULE 3 -->
-<!-- ================================================================= -->
-<section class="module-panel" data-module-panel="3">
+        // CHECK ANSWER
+        function checkAnswer(questionId, correctAnswer, explanation) {
+            const feedbackDiv = document.getElementById(questionId + '-feedback');
+            let userAnswer = '';
 
-  <div class="mb-8">
-    <span class="text-xs font-bold uppercase tracking-widest text-rose-500">Module 3 &middot; Unit 4</span>
-    <h2 class="font-display font-bold text-3xl text-indigo-950 mt-1">Comparative &amp; Superlative Adjectives</h2>
-    <p class="text-slate-500 mt-2 max-w-2xl">Comparing two things vs. picking the extreme of a whole group.</p>
-  </div>
+            // Get user answer based on question type
+            if (document.getElementById(questionId + '-input')) {
+                userAnswer = document.getElementById(questionId + '-input').value.trim().toLowerCase();
+            } else if (document.getElementById(questionId + '-select')) {
+                userAnswer = document.getElementById(questionId + '-select').value.toLowerCase();
+            } else {
+                const checked = document.querySelector(`input[name="${questionId}"]:checked`);
+                userAnswer = checked ? checked.value.toLowerCase() : '';
+            }
 
-  <div class="flex gap-6 border-b border-slate-200 mb-8">
-    <button class="subtab-btn active-subtab pb-3 border-b-2 border-transparent font-semibold text-slate-500 transition duration-300" data-subtab="learn" data-module="3">
-      <i class="fa-solid fa-book mr-2"></i>Learn &amp; Review
-    </button>
-    <button class="subtab-btn pb-3 border-b-2 border-transparent font-semibold text-slate-500 transition duration-300" data-subtab="practice" data-module="3">
-      <i class="fa-solid fa-pen-to-square mr-2"></i>Practice Exercises
-    </button>
-  </div>
+            const isCorrect = userAnswer === correctAnswer.toLowerCase();
+            const questionCard = feedbackDiv.closest('.question-card');
 
-  <div class="subtab-panel active" data-subtab-panel="learn" data-module="3">
+            // Mark as checked
+            quizState.checked[questionId] = true;
 
-    <div class="grid sm:grid-cols-2 gap-4 mb-8">
-      <div class="rounded-2xl bg-indigo-600 text-white p-6">
-        <p class="text-xs uppercase tracking-widest text-indigo-200 mb-2">Two things</p>
-        <h3 class="font-display font-bold text-2xl mb-2">Comparative</h3>
-        <p class="text-indigo-100 text-sm">adjective + <span class="font-mono">-er</span> &nbsp;or&nbsp; <span class="font-mono">more</span> + adjective &nbsp;+&nbsp; <span class="font-mono">than</span></p>
-        <p class="font-mono text-sm mt-3 bg-white/10 rounded-2xl px-3 py-2">A train is faster <b>than</b> a bike.</p>
-      </div>
-      <div class="rounded-2xl bg-amber-500 text-white p-6">
-        <p class="text-xs uppercase tracking-widest text-amber-100 mb-2">A whole group</p>
-        <h3 class="font-display font-bold text-2xl mb-2">Superlative</h3>
-        <p class="text-amber-50 text-sm"><span class="font-mono">the</span> + adjective + <span class="font-mono">-est</span> &nbsp;or&nbsp; <span class="font-mono">the most</span> + adjective</p>
-        <p class="font-mono text-sm mt-3 bg-white/10 rounded-2xl px-3 py-2">The bullet train is <b>the fastest</b>.</p>
-      </div>
-    </div>
+            // Update score
+            if (isCorrect && !quizState.answers[questionId]) {
+                const moduleId = questions[questionId].module;
+                quizState.scores[moduleId]++;
+                quizState.answers[questionId] = true;
+            } else if (!isCorrect && quizState.answers[questionId]) {
+                const moduleId = questions[questionId].module;
+                quizState.scores[moduleId]--;
+                quizState.answers[questionId] = false;
+            }
 
-    <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm mb-8 overflow-x-auto">
-      <h3 class="font-display font-bold text-xl text-indigo-900 mb-4"><i class="fa-solid fa-ruler text-indigo-500 mr-2"></i>Spelling Rules</h3>
-      <table class="w-full text-sm border-collapse min-w-[560px]">
-        <thead>
-          <tr class="bg-indigo-600 text-white">
-            <th class="py-3 px-4 text-left rounded-tl-lg">Adjective type</th>
-            <th class="py-3 px-4 text-left">Comparative</th>
-            <th class="py-3 px-4 text-left rounded-tr-lg">Superlative</th>
-          </tr>
-        </thead>
-        <tbody class="divide-y divide-slate-100">
-          <tr class="bg-slate-50">
-            <td class="py-3 px-4">1 syllable &mdash; <span class="font-mono text-indigo-600">tall</span></td>
-            <td class="py-3 px-4 font-mono">tall<b>er</b></td>
-            <td class="py-3 px-4 font-mono">the tall<b>est</b></td>
-          </tr>
-          <tr>
-            <td class="py-3 px-4">1 syllable, CVC &mdash; <span class="font-mono text-indigo-600">big</span></td>
-            <td class="py-3 px-4 font-mono">big<b>ger</b></td>
-            <td class="py-3 px-4 font-mono">the big<b>gest</b></td>
-          </tr>
-          <tr class="bg-slate-50">
-            <td class="py-3 px-4">2 syllables, ending -y &mdash; <span class="font-mono text-indigo-600">happy</span></td>
-            <td class="py-3 px-4 font-mono">happ<b>ier</b></td>
-            <td class="py-3 px-4 font-mono">the happ<b>iest</b></td>
-          </tr>
-          <tr>
-            <td class="py-3 px-4">2+ syllables &mdash; <span class="font-mono text-indigo-600">interesting</span></td>
-            <td class="py-3 px-4 font-mono"><b>more</b> interesting</td>
-            <td class="py-3 px-4 font-mono">the <b>most</b> interesting</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+            // Display feedback
+            feedbackDiv.classList.remove('hidden');
+            if (isCorrect) {
+                questionCard.classList.add('answer-correct');
+                questionCard.classList.remove('answer-incorrect');
+                feedbackDiv.innerHTML = `
+                    <div class="bg-emerald-100 border-l-4 border-emerald-500 p-4 rounded">
+                        <p class="font-bold text-emerald-800 mb-2">
+                            <i class="fas fa-check-circle"></i> Correct!
+                        </p>
+                        <p class="text-emerald-700">${explanation}</p>
+                    </div>
+                `;
+            } else {
+                questionCard.classList.add('answer-incorrect');
+                questionCard.classList.remove('answer-correct');
+                feedbackDiv.innerHTML = `
+                    <div class="bg-rose-100 border-l-4 border-rose-500 p-4 rounded">
+                        <p class="font-bold text-rose-800 mb-2">
+                            <i class="fas fa-times-circle"></i> Incorrect. The correct answer is: <span class="text-base">${correctAnswer}</span>
+                        </p>
+                        <p class="text-rose-700">${explanation}</p>
+                    </div>
+                `;
+            }
 
-    <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
-      <h3 class="font-display font-bold text-xl text-indigo-900 mb-4"><i class="fa-solid fa-star text-indigo-500 mr-2"></i>Irregular Adjectives</h3>
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
-        <div class="rounded-2xl bg-indigo-50 p-4">
-          <p class="font-semibold text-indigo-900">good</p>
-          <p class="text-slate-500">better &rarr; the best</p>
-        </div>
-        <div class="rounded-2xl bg-indigo-50 p-4">
-          <p class="font-semibold text-indigo-900">bad</p>
-          <p class="text-slate-500">worse &rarr; the worst</p>
-        </div>
-        <div class="rounded-2xl bg-indigo-50 p-4">
-          <p class="font-semibold text-indigo-900">far</p>
-          <p class="text-slate-500">further &rarr; the furthest</p>
-        </div>
-      </div>
-    </div>
+            updateScoreboard();
+            checkSubmitButtonState();
+        }
 
-  </div>
+        // UPDATE SCOREBOARD
+        function updateScoreboard() {
+            const totalScore = quizState.scores.module1 + quizState.scores.module2 + quizState.scores.module3;
+            const checkedCount = Object.keys(quizState.checked).length;
+            const percentage = Math.round((checkedCount / 15) * 100);
 
-  <div class="subtab-panel" data-subtab-panel="practice" data-module="3">
-    <div id="quiz-m3" class="space-y-6"></div>
-  </div>
+            document.getElementById('current-score').textContent = `${totalScore}/15`;
+            document.getElementById('progress-percentage').textContent = `${percentage}%`;
+        }
 
-</section>
+        // CHECK SUBMIT BUTTON STATE
+        function checkSubmitButtonState() {
+            const allChecked = Object.keys(quizState.checked).length === 15;
+            document.getElementById('submit-btn').disabled = !allChecked;
+        }
 
-<!-- Submit -->
-<div class="mt-14 flex flex-col items-center gap-3 text-center">
-  <button id="submit-quiz-btn" class="btn-chunky inline-flex items-center gap-3 bg-fuchsia-500 hover:bg-fuchsia-500 text-white font-bold px-8 py-4 rounded-2xl transition duration-300 text-lg" style="--chunky-shadow:#a21caf">
-    <i class="fa-solid fa-trophy"></i> Submit Quiz &amp; See My Results!
-  </button>
-  <p class="text-sm text-slate-400">You can submit any time &mdash; unanswered questions just count as incorrect. 😊</p>
-</div>
+        // SUBMIT QUIZ
+        function submitQuiz() {
+            const totalScore = quizState.scores.module1 + quizState.scores.module2 + quizState.scores.module3;
+            const percentage = Math.round((totalScore / 15) * 100);
+            let grade = 'F';
+            let feedbackMsg = 'Keep practicing! Every effort counts toward improvement.';
+            let gradeClass = 'grade-F';
 
-</main>
+            if (percentage >= 90) {
+                grade = 'A';
+                feedbackMsg = '🌟 Excellent! You\'ve mastered these grammar concepts!';
+                gradeClass = 'grade-A';
+            } else if (percentage >= 80) {
+                grade = 'B';
+                feedbackMsg = '👏 Great job! You have a strong grasp of the material!';
+                gradeClass = 'grade-B';
+            } else if (percentage >= 70) {
+                grade = 'C';
+                feedbackMsg = '✓ Good effort! Review the material and try again to improve.';
+                gradeClass = 'grade-C';
+            }
 
-<!-- ============ FLOATING SCOREBOARD ============ -->
-<div id="scoreboard" class="fixed bottom-3 right-3 sm:bottom-5 sm:right-5 z-50 select-none">
-  <div class="bg-white rounded-3xl shadow-2xl border-2 border-violet-100 p-3 sm:p-4 flex items-center gap-3 sm:gap-4 w-[175px] sm:w-[245px] transition duration-300">
-    <div class="relative w-11 h-11 sm:w-16 sm:h-16 flex-shrink-0">
-      <svg viewBox="0 0 64 64" class="w-11 h-11 sm:w-16 sm:h-16 -rotate-90">
-        <circle cx="32" cy="32" r="27" fill="none" stroke-width="7" class="ring-bg"></circle>
-        <circle id="ring-fg" cx="32" cy="32" r="27" fill="none" stroke-width="7" stroke-linecap="round" class="ring-fg" stroke-dasharray="169.6" stroke-dashoffset="169.6"></circle>
-      </svg>
-      <div class="absolute inset-0 flex items-center justify-center text-[9px] sm:text-xs font-bold text-indigo-700" id="progress-pct">0%</div>
-    </div>
-    <div>
-      <p class="text-[9px] sm:text-[11px] uppercase tracking-widest text-fuchsia-400 font-bold flex items-center gap-1"><i class="fa-solid fa-star text-sunny"></i>Score</p>
-      <p class="font-display font-bold text-base sm:text-xl text-indigo-950"><span id="score-current">0</span>/15</p>
-      <p class="text-[9px] sm:text-[11px] text-slate-400 mt-0.5"><span id="progress-answered">0</span> of 15 done</p>
-    </div>
-  </div>
-</div>
+            // Build grade display
+            const gradeHtml = `
+                <div class="w-24 h-24 rounded-full mx-auto flex items-center justify-center font-bold text-4xl ${gradeClass}">
+                    ${grade}
+                </div>
+            `;
 
-<!-- ============ RESULTS MODAL ============ -->
-<div id="results-modal" class="fixed inset-0 z-[60] hidden items-center justify-center bg-indigo-950/70 backdrop-blur-sm p-4">
-  <div id="results-card" class="bg-white rounded-3xl shadow-2xl max-w-lg w-full p-8 relative max-h-[90vh] overflow-y-auto overflow-x-hidden pop-in">
-    <button id="close-modal" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600 transition duration-300">
-      <i class="fa-solid fa-xmark text-xl"></i>
-    </button>
+            // Build module breakdown
+            const breakdownHtml = `
+                <h3 class="font-bold text-slate-800 mb-3">Performance by Module:</h3>
+                <div class="space-y-2">
+                    <div class="flex justify-between items-center">
+                        <span class="text-slate-700">Module 1: Nouns & Basics</span>
+                        <span class="font-bold text-indigo-600">${quizState.scores.module1}/5</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2">
+                        <div class="bg-indigo-600 h-2 rounded-full" style="width: ${(quizState.scores.module1 / 5) * 100}%"></div>
+                    </div>
+                    <div class="flex justify-between items-center mt-4">
+                        <span class="text-slate-700">Module 2: Present Tenses</span>
+                        <span class="font-bold text-indigo-600">${quizState.scores.module2}/5</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2">
+                        <div class="bg-indigo-600 h-2 rounded-full" style="width: ${(quizState.scores.module2 / 5) * 100}%"></div>
+                    </div>
+                    <div class="flex justify-between items-center mt-4">
+                        <span class="text-slate-700">Module 3: Comparatives & Superlatives</span>
+                        <span class="font-bold text-indigo-600">${quizState.scores.module3}/5</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2">
+                        <div class="bg-indigo-600 h-2 rounded-full" style="width: ${(quizState.scores.module3 / 5) * 100}%"></div>
+                    </div>
+                </div>
+            `;
 
-    <div class="text-center">
-      <div id="grade-badge" class="w-24 h-24 rounded-full mx-auto flex items-center justify-center letter-badge text-4xl font-bold bg-indigo-100 text-indigo-700 border-4 border-white shadow-lg">A</div>
-      <h3 class="font-display font-bold text-2xl text-indigo-950 mt-4">Quiz Complete! 🎓</h3>
-      <p id="final-score-text" class="text-slate-500 mt-1">You scored 0 out of 15</p>
-      <p id="motivation-text" class="text-fuchsia-600 font-bold mt-2">&nbsp;</p>
-    </div>
+            document.getElementById('grade-display').innerHTML = gradeHtml;
+            document.getElementById('final-score').textContent = `${totalScore}/15`;
+            document.getElementById('final-percentage').textContent = `${percentage}%`;
+            document.getElementById('final-grade').textContent = grade;
+            document.getElementById('module-breakdown').innerHTML = breakdownHtml;
+            document.getElementById('feedback-message').textContent = feedbackMsg;
 
-    <div class="mt-6 space-y-3">
-      <div class="flex items-center justify-between text-sm bg-emerald-50 rounded-2xl px-4 py-3">
-        <span class="font-bold text-slate-600"><i class="fa-solid fa-shapes text-emerald-500 mr-2"></i>Module 1 &mdash; Intro</span>
-        <span id="score-mod-1" class="font-bold text-indigo-900">0/5</span>
-      </div>
-      <div class="flex items-center justify-between text-sm bg-sky-50 rounded-2xl px-4 py-3">
-        <span class="font-bold text-slate-600"><i class="fa-solid fa-clock-rotate-left text-indigo-500 mr-2"></i>Module 2 &mdash; Unit 3</span>
-        <span id="score-mod-2" class="font-bold text-indigo-900">0/5</span>
-      </div>
-      <div class="flex items-center justify-between text-sm bg-rose-50 rounded-2xl px-4 py-3">
-        <span class="font-bold text-slate-600"><i class="fa-solid fa-scale-balanced text-rose-500 mr-2"></i>Module 3 &mdash; Unit 4</span>
-        <span id="score-mod-3" class="font-bold text-indigo-900">0/5</span>
-      </div>
-    </div>
+            document.getElementById('result-modal').classList.remove('hidden');
+        }
 
-    <div class="mt-7 flex gap-3">
-      <button id="reset-quiz-btn" class="btn-chunky flex-1 inline-flex items-center justify-center gap-2 bg-rose-50 hover:bg-rose-50 text-rose-600 font-bold px-5 py-3 rounded-2xl transition duration-300" style="--chunky-shadow:#fecdd3">
-        <i class="fa-solid fa-rotate-left"></i> Reset Quiz
-      </button>
-      <button id="close-modal-2" class="btn-chunky flex-1 inline-flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-600 text-white font-bold px-5 py-3 rounded-2xl transition duration-300" style="--chunky-shadow:#312e81">
-        Review Answers
-      </button>
-    </div>
-  </div>
-</div>
+        // RESET QUIZ
+        function resetQuiz() {
+            quizState.answers = {};
+            quizState.checked = {};
+            quizState.scores = { module1: 0, module2: 0, module3: 0 };
+            
+            // Clear all inputs and selections
+            document.querySelectorAll('input[type="text"]').forEach(input => input.value = '');
+            document.querySelectorAll('input[type="radio"]').forEach(input => input.checked = false);
+            document.querySelectorAll('select').forEach(select => select.value = '');
+            document.querySelectorAll('.question-card').forEach(card => {
+                card.classList.remove('answer-correct', 'answer-incorrect');
+            });
+            document.querySelectorAll('[id$="-feedback"]').forEach(div => {
+                div.classList.add('hidden');
+                div.innerHTML = '';
+            });
 
-<footer class="bg-indigo-950 text-indigo-300 text-center text-sm py-6">
-  <p>Made for grammar practice &middot; Interactive English Grammar Masterclass ✨</p>
-</footer>
+            closeModal();
+            updateScoreboard();
+            checkSubmitButtonState();
+        }
 
-<script>
-/* ============================================================
-   QUESTION DATA
-   ============================================================ */
-const QUESTIONS = {
-  1: [
-    {
-      id: 'm1q1', type: 'mc',
-      prompt: "What is the correct plural form of <span class='font-mono text-indigo-700'>man</span>?",
-      options: ['mans', 'mens', 'men', 'manes'],
-      answer: 'men',
-      explanation: "\"Man\" has an irregular plural: <b>man &rarr; men</b>. It doesn't follow the regular -s pattern."
-    },
-    {
-      id: 'm1q2', type: 'fill',
-      prompt: "She has two ______ . <span class='text-slate-400'>(baby)</span>",
-      answer: 'babies',
-      explanation: "When a noun ends in a consonant + <b>y</b>, change the <b>y</b> to <b>i</b> and add <b>-es</b>: baby &rarr; bab<b>ies</b>."
-    },
-    {
-      id: 'm1q3', type: 'dropdown',
-      prompt: "______ shoes on my feet right now are brand new.",
-      options: ['This', 'That', 'These', 'Those'],
-      answer: 'These',
-      explanation: "\"Shoes\" is plural and they are near the speaker (on my feet right now), so we use <b>These</b>."
-    },
-    {
-      id: 'm1q4', type: 'mc',
-      prompt: "Choose the correct negative imperative:",
-      options: ["Don't running in the hallway.", "Don't run in the hallway.", "Not run in the hallway.", "Doesn't run in the hallway."],
-      answer: "Don't run in the hallway.",
-      explanation: "Negative imperatives use <b>Don't + base verb</b> (no -ing, no 3rd person -s): \"Don't run.\""
-    },
-    {
-      id: 'm1q5', type: 'fill',
-      prompt: "Please ______ the window. <span class='text-slate-400'>(open)</span>",
-      answer: 'open',
-      explanation: "Affirmative imperatives use the <b>base form</b> of the verb with no subject: \"Open the window.\""
-    },
-  ],
-  2: [
-    {
-      id: 'm2q1', type: 'mc',
-      prompt: "Which is the correct -ing form of <span class='font-mono text-indigo-700'>write</span>?",
-      options: ['writeing', 'writting', 'writing', 'wrieing'],
-      answer: 'writing',
-      explanation: "Drop the silent <b>-e</b> before adding <b>-ing</b>: writ<span class='line-through'>e</span> &rarr; writ<b>ing</b>."
-    },
-    {
-      id: 'm2q2', type: 'fill',
-      prompt: "Look! It ______ outside. <span class='text-slate-400'>(rain)</span>",
-      answer: 'is raining',
-      explanation: "\"Look!\" signals an action happening right now, so we use Present Continuous: <b>is raining</b>."
-    },
-    {
-      id: 'm2q3', type: 'dropdown',
-      prompt: "I ______ the answer to this question.",
-      options: ['know', 'am knowing', 'knows', 'is knowing'],
-      answer: 'know',
-      explanation: "\"Know\" is a <b>stative verb</b> (mental state). Stative verbs are not used in the -ing form: use Present Simple, \"I know\"."
-    },
-    {
-      id: 'm2q4', type: 'mc',
-      prompt: "Which sentence correctly uses a routine time expression?",
-      options: ['He is walking to school every day.', 'He walks to school every day.', 'He walking to school every day.', 'He walk to school every day.'],
-      answer: 'He walks to school every day.',
-      explanation: "\"Every day\" signals a habit, so we use <b>Present Simple</b>: \"He walks to school every day.\""
-    },
-    {
-      id: 'm2q5', type: 'fill',
-      prompt: "They are ______ at the red light right now. <span class='text-slate-400'>(stop)</span>",
-      answer: 'stopping',
-      explanation: "1-syllable verb ending in a single vowel + consonant &mdash; double the final consonant: stop &rarr; stop<b>p</b>ing."
-    },
-  ],
-  3: [
-    {
-      id: 'm3q1', type: 'mc',
-      prompt: "What is the comparative form of <span class='font-mono text-indigo-700'>good</span>?",
-      options: ['gooder', 'more good', 'better', 'best'],
-      answer: 'better',
-      explanation: "\"Good\" is irregular: <b>good &rarr; better &rarr; the best</b>. It doesn't take -er or more."
-    },
-    {
-      id: 'm3q2', type: 'fill',
-      prompt: "This book is ______ than that one. <span class='text-slate-400'>(interesting)</span>",
-      answer: 'more interesting',
-      explanation: "Adjectives with 2+ syllables (like \"interesting\") form the comparative with <b>more</b> + adjective + than."
-    },
-    {
-      id: 'm3q3', type: 'dropdown',
-      prompt: "Of all the planets, Neptune is the ______ from the sun.",
-      options: ['far', 'farer', 'furthest', 'more far'],
-      answer: 'furthest',
-      explanation: "\"Far\" is irregular: <b>far &rarr; further &rarr; the furthest</b>."
-    },
-    {
-      id: 'm3q4', type: 'mc',
-      prompt: "Choose the correct comparative of <span class='font-mono text-indigo-700'>big</span>:",
-      options: ['bigger', 'biger', 'more big', 'biggest'],
-      answer: 'bigger',
-      explanation: "1-syllable adjective ending in a single vowel + consonant &mdash; double the final consonant: big &rarr; big<b>g</b>er."
-    },
-    {
-      id: 'm3q5', type: 'fill',
-      prompt: "Mount Everest is the ______ mountain in the world. <span class='text-slate-400'>(tall)</span>",
-      answer: 'tallest',
-      explanation: "For 1-syllable adjectives, the superlative is formed with <b>the</b> + adjective + <b>-est</b>: the tall<b>est</b>."
-    },
-  ],
-};
+        // CLOSE MODAL
+        function closeModal() {
+            document.getElementById('result-modal').classList.add('hidden');
+        }
 
-/* ============================================================
-   STATE
-   ============================================================ */
-const results = {}; // { qid: true/false }
-const TOTAL_QUESTIONS = 15;
-
-/* ============================================================
-   RENDER QUESTIONS
-   ============================================================ */
-function renderQuestions() {
-  Object.keys(QUESTIONS).forEach(modNum => {
-    const container = document.getElementById(`quiz-m${modNum}`);
-    container.innerHTML = '';
-    QUESTIONS[modNum].forEach((q, idx) => {
-      container.appendChild(buildQuestionCard(q, idx + 1, modNum));
-    });
-  });
-}
-
-function buildQuestionCard(q, num, modNum) {
-  const card = document.createElement('div');
-  card.className = 'bg-white rounded-3xl border-2 border-violet-100 p-6 shadow-md';
-  card.id = `card-${q.id}`;
-
-  const typeLabel = { mc: 'Multiple Choice', fill: 'Fill in the Blank', dropdown: 'Choose the Alternative' }[q.type];
-  const typeIcon = { mc: 'fa-list-check', fill: 'fa-keyboard', dropdown: 'fa-caret-down' }[q.type];
-
-  let inputHtml = '';
-  if (q.type === 'mc') {
-    inputHtml = `<div class="grid sm:grid-cols-2 gap-3 mt-4">` + q.options.map((opt, i) => `
-      <div class="option-card">
-        <input type="radio" name="${q.id}" id="${q.id}-opt${i}" value="${escapeHtml(opt)}" class="sr-only peer">
-        <label for="${q.id}-opt${i}" class="cursor-pointer block border-2 border-slate-200 rounded-2xl px-4 py-3 text-sm font-semibold text-slate-600 hover:border-violet-300 hover:bg-violet-50 transition duration-300">
-          ${opt}
-        </label>
-      </div>`).join('') + `</div>`;
-  } else if (q.type === 'fill') {
-    inputHtml = `<input type="text" id="${q.id}-input" placeholder="Type your answer here..."
-      class="mt-4 w-full border-2 border-slate-200 rounded-2xl px-4 py-3 text-sm font-semibold text-slate-700 transition duration-300">`;
-  } else if (q.type === 'dropdown') {
-    inputHtml = `<select id="${q.id}-input" class="mt-4 w-full border-2 border-slate-200 rounded-2xl px-4 py-3 text-sm font-semibold text-slate-700 bg-white transition duration-300">
-      <option value="" disabled selected>Select the correct option...</option>
-      ${q.options.map(opt => `<option value="${escapeHtml(opt)}">${opt}</option>`).join('')}
-    </select>`;
-  }
-
-  card.innerHTML = `
-    <div class="flex items-center justify-between mb-1">
-      <span class="text-xs font-bold uppercase tracking-widest text-fuchsia-500">🌟 Question ${num} of 5</span>
-      <span class="text-xs font-bold text-violet-400 flex items-center gap-1.5 bg-violet-50 rounded-full px-3 py-1"><i class="fa-solid ${typeIcon}"></i>${typeLabel}</span>
-    </div>
-    <p class="text-lg font-semibold text-slate-800 mt-3 leading-relaxed">${q.prompt}</p>
-    ${inputHtml}
-    <div class="mt-5 flex items-center gap-3 flex-wrap">
-      <button data-check="${q.id}" data-mod="${modNum}" class="check-btn btn-chunky inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-600 text-white font-bold px-5 py-2.5 rounded-2xl transition duration-300 text-sm" style="--chunky-shadow:#312e81">
-        <i class="fa-solid fa-circle-check"></i> Check Answer
-      </button>
-      <span id="${q.id}-status" class="text-sm font-bold"></span>
-    </div>
-    <div id="${q.id}-feedback" class="feedback-box hidden mt-4 rounded-2xl p-4 text-sm"></div>
-  `;
-  return card;
-}
-
-function escapeHtml(str) {
-  return str.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-}
-
-/* ============================================================
-   CHECK ANSWER LOGIC
-   ============================================================ */
-function checkAnswer(qid, modNum) {
-  const q = QUESTIONS[modNum].find(item => item.id === qid);
-  let userAnswer = null;
-  let isCorrect = false;
-
-  if (q.type === 'mc') {
-    const selected = document.querySelector(`input[name="${qid}"]:checked`);
-    userAnswer = selected ? selected.value : null;
-    if (!userAnswer) { flashNoAnswer(qid); return; }
-    isCorrect = userAnswer === q.answer;
-
-    document.querySelectorAll(`input[name="${qid}"]`).forEach(inp => {
-      const label = document.querySelector(`label[for="${inp.id}"]`);
-      label.classList.remove('border-indigo-600', 'bg-indigo-50');
-      if (inp.value === q.answer) {
-        label.classList.add('border-emerald-500', 'bg-emerald-50', 'text-emerald-700');
-      } else if (inp.checked) {
-        label.classList.add('border-rose-500', 'bg-rose-50', 'text-rose-700');
-      }
-      inp.disabled = true;
-    });
-  } else {
-    const input = document.getElementById(`${qid}-input`);
-    userAnswer = input.value.trim();
-    if (!userAnswer) { flashNoAnswer(qid); return; }
-    isCorrect = userAnswer.toLowerCase() === q.answer.toLowerCase();
-    input.disabled = true;
-    input.classList.remove('border-slate-200');
-    input.classList.add(isCorrect ? 'border-emerald-500' : 'border-rose-500', isCorrect ? 'bg-emerald-50' : 'bg-rose-50');
-  }
-
-  results[qid] = isCorrect;
-
-  // disable check button
-  const btn = document.querySelector(`button[data-check="${qid}"]`);
-  btn.disabled = true;
-  btn.classList.add('opacity-50', 'cursor-not-allowed');
-
-  const status = document.getElementById(`${qid}-status`);
-  status.innerHTML = isCorrect
-    ? `<span class="text-emerald-600"><i class="fa-solid fa-star"></i> Nice one! Correct! 🎉</span>`
-    : `<span class="text-rose-500"><i class="fa-solid fa-circle-xmark"></i> Oops, not quite!</span>`;
-
-  const feedback = document.getElementById(`${qid}-feedback`);
-  feedback.classList.remove('hidden');
-  feedback.classList.add(isCorrect ? 'bg-emerald-50' : 'bg-rose-50', isCorrect ? 'text-emerald-800' : 'text-rose-800');
-  const correctLine = isCorrect ? '' : `<p class="font-bold mb-1">✏️ Correct answer: <span class="font-mono">${q.answer}</span></p>`;
-  feedback.innerHTML = `${correctLine}<p>${q.explanation}</p>`;
-
-  const cardEl = document.getElementById(`card-${qid}`);
-  if (isCorrect) {
-    cardEl.classList.add('correct-flash');
-    burstConfetti(cardEl);
-  } else {
-    cardEl.classList.add('wrong-shake');
-    setTimeout(() => cardEl.classList.remove('wrong-shake'), 450);
-  }
-
-  updateScoreboard();
-}
-
-/* little confetti burst near a card when the answer is right */
-function burstConfetti(anchorEl) {
-  const colors = ['#ff8fab', '#ffc94b', '#5ec8f2', '#4fd1a5', '#a78bfa'];
-  const holder = document.createElement('div');
-  holder.style.position = 'absolute';
-  holder.style.left = '0';
-  holder.style.right = '0';
-  holder.style.top = '0';
-  holder.style.height = '0';
-  holder.style.overflow = 'visible';
-  holder.style.pointerEvents = 'none';
-  anchorEl.style.position = 'relative';
-  anchorEl.appendChild(holder);
-
-  for (let i = 0; i < 16; i++) {
-    const piece = document.createElement('span');
-    piece.className = 'confetti-piece';
-    piece.style.left = `${Math.random() * 100}%`;
-    piece.style.width = `${5 + Math.random() * 4}px`;
-    piece.style.height = `${8 + Math.random() * 5}px`;
-    piece.style.background = colors[Math.floor(Math.random() * colors.length)];
-    piece.style.animationDuration = `${0.9 + Math.random() * 0.6}s`;
-    piece.style.animationDelay = `${Math.random() * 0.15}s`;
-    holder.appendChild(piece);
-  }
-  setTimeout(() => holder.remove(), 1800);
-}
-
-function flashNoAnswer(qid) {
-  const status = document.getElementById(`${qid}-status`);
-  status.innerHTML = `<span class="text-amber-500"><i class="fa-solid fa-hand-point-up"></i> Pick an answer first! 👀</span>`;
-  setTimeout(() => { status.innerHTML = ''; }, 1800);
-}
-
-/* ============================================================
-   SCOREBOARD
-   ============================================================ */
-function updateScoreboard() {
-  const answered = Object.keys(results).length;
-  const correct = Object.values(results).filter(Boolean).length;
-  const pct = Math.round((answered / TOTAL_QUESTIONS) * 100);
-
-  document.getElementById('score-current').textContent = correct;
-  document.getElementById('progress-answered').textContent = answered;
-  document.getElementById('progress-pct').textContent = `${pct}%`;
-
-  const circumference = 169.6;
-  const offset = circumference - (circumference * pct / 100);
-  document.getElementById('ring-fg').setAttribute('stroke-dashoffset', offset);
-}
-
-/* ============================================================
-   TAB SWITCHING
-   ============================================================ */
-document.querySelectorAll('.tab-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const mod = btn.dataset.module;
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active-tab'));
-    btn.classList.add('active-tab');
-    document.querySelectorAll('.module-panel').forEach(p => p.classList.remove('active'));
-    document.querySelector(`[data-module-panel="${mod}"]`).classList.add('active');
-    window.scrollTo({ top: document.getElementById('modules').offsetTop - 10, behavior: 'smooth' });
-  });
-});
-
-document.querySelectorAll('.subtab-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const mod = btn.dataset.module;
-    const sub = btn.dataset.subtab;
-    const parent = btn.closest('[data-module-panel]');
-    parent.querySelectorAll('.subtab-btn').forEach(b => b.classList.remove('active-subtab'));
-    btn.classList.add('active-subtab');
-    parent.querySelectorAll('.subtab-panel').forEach(p => p.classList.remove('active'));
-    parent.querySelector(`[data-subtab-panel="${sub}"][data-module="${mod}"]`).classList.add('active');
-  });
-});
-
-/* delegate check-answer clicks */
-document.addEventListener('click', e => {
-  const btn = e.target.closest('.check-btn');
-  if (btn) checkAnswer(btn.dataset.check, btn.dataset.mod);
-});
-
-/* ============================================================
-   SUBMIT / MODAL / RESET
-   ============================================================ */
-function computeModuleScore(modNum) {
-  return QUESTIONS[modNum].reduce((sum, q) => sum + (results[q.id] ? 1 : 0), 0);
-}
-
-function letterGrade(pct) {
-  if (pct >= 90) return { letter: 'A', color: 'bg-emerald-100 text-emerald-700', msg: 'Wow, amazing job! You\'ve totally nailed these rules! 🌟', celebrate: true };
-  if (pct >= 80) return { letter: 'B', color: 'bg-indigo-100 text-indigo-700', msg: 'Great work! Just a couple of details to polish. 💪', celebrate: true };
-  if (pct >= 70) return { letter: 'C', color: 'bg-amber-100 text-amber-700', msg: 'Good effort! Peek back at the missed rules and try again. 📚', celebrate: false };
-  if (pct >= 60) return { letter: 'D', color: 'bg-orange-100 text-orange-700', msg: 'You\'re getting there — revisit the lessons above and go again! 🌱', celebrate: false };
-  return { letter: 'F', color: 'bg-rose-100 text-rose-700', msg: 'Don\'t give up! Review the lessons and try again — you got this! 🙌', celebrate: false };
-}
-
-document.getElementById('submit-quiz-btn').addEventListener('click', () => {
-  const m1 = computeModuleScore(1), m2 = computeModuleScore(2), m3 = computeModuleScore(3);
-  const total = m1 + m2 + m3;
-  const pct = Math.round((total / TOTAL_QUESTIONS) * 100);
-  const grade = letterGrade(pct);
-
-  document.getElementById('score-mod-1').textContent = `${m1}/5`;
-  document.getElementById('score-mod-2').textContent = `${m2}/5`;
-  document.getElementById('score-mod-3').textContent = `${m3}/5`;
-  document.getElementById('final-score-text').textContent = `You scored ${total} out of ${TOTAL_QUESTIONS} (${pct}%)`;
-  document.getElementById('motivation-text').textContent = grade.msg;
-
-  const badge = document.getElementById('grade-badge');
-  badge.textContent = grade.letter;
-  badge.className = `w-24 h-24 rounded-full mx-auto flex items-center justify-center letter-badge text-4xl font-bold border-4 border-white shadow-lg ${grade.color}`;
-
-  const modal = document.getElementById('results-modal');
-  modal.classList.remove('hidden');
-  modal.classList.add('flex');
-
-  if (grade.celebrate) {
-    const card = document.getElementById('results-card');
-    setTimeout(() => burstConfetti(card), 150);
-  }
-});
-
-function closeModal() {
-  const modal = document.getElementById('results-modal');
-  modal.classList.add('hidden');
-  modal.classList.remove('flex');
-}
-document.getElementById('close-modal').addEventListener('click', closeModal);
-document.getElementById('close-modal-2').addEventListener('click', closeModal);
-document.getElementById('results-modal').addEventListener('click', e => {
-  if (e.target.id === 'results-modal') closeModal();
-});
-
-document.getElementById('reset-quiz-btn').addEventListener('click', () => {
-  Object.keys(results).forEach(k => delete results[k]);
-  renderQuestions();
-  updateScoreboard();
-  closeModal();
-  document.querySelectorAll('.tab-btn')[0].click();
-  document.querySelector('.subtab-btn[data-subtab="learn"][data-module="1"]').click();
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-});
-
-/* ============================================================
-   INIT
-   ============================================================ */
-renderQuestions();
-updateScoreboard();
-</script>
-
+        // Initialize
+        updateScoreboard();
+        checkSubmitButtonState();
+    </script>
 </body>
 </html>
